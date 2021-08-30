@@ -1,0 +1,69 @@
+<?xml version="1.0" ?>
+<!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
+<coverage lines-valid="58" lines-covered="57" line-rate="0.9828" branches-valid="4" branches-covered="3" branch-rate="0.75" timestamp="1630325841466" complexity="0" version="0.1">
+    <sources>
+        <source>$PROJECT_PATH</source>
+    </sources>
+    <packages>
+        <package name="src" line-rate="1" branch-rate="1">
+            <classes>
+                <class name="calc.ts" filename="src/calc.ts" line-rate="1" branch-rate="1">
+                    <methods>
+                        <method name="add" hits="1" signature="()V">
+                            <lines>
+                                <line number="1" hits="1"/>
+                            </lines>
+                        </method>
+                        <method name="sub" hits="1" signature="()V">
+                            <lines>
+                                <line number="8" hits="1"/>
+                            </lines>
+                        </method>
+                        <method name="mul" hits="2" signature="()V">
+                            <lines>
+                                <line number="12" hits="2"/>
+                            </lines>
+                        </method>
+                        <method name="div" hits="2" signature="()V">
+                            <lines>
+                                <line number="16" hits="2"/>
+                            </lines>
+                        </method>
+                    </methods>
+                    <lines>
+                        <line number="2" hits="1" branch="false"/>
+                        <line number="3" hits="1" branch="false"/>
+                        <line number="4" hits="1" branch="false"/>
+                        <line number="5" hits="1" branch="false"/>
+                        <line number="9" hits="1" branch="false"/>
+                        <line number="13" hits="2" branch="false"/>
+                        <line number="17" hits="2" branch="true" condition-coverage="100% (2/2)"/>
+                        <line number="18" hits="1" branch="false"/>
+                        <line number="20" hits="1" branch="false"/>
+                        <line number="24" hits="1" branch="false"/>
+                        <line number="25" hits="1" branch="false"/>
+                        <line number="26" hits="1" branch="false"/>
+                        <line number="27" hits="1" branch="false"/>
+                    </lines>
+                </class>
+            </classes>
+        </package>
+        <package name="tools" line-rate="1" branch-rate="1">
+            <classes>
+                <class name="print.ts" filename="tools/print.ts" line-rate="1" branch-rate="1">
+                    <methods>
+                        <method name="print" hits="1" signature="()V">
+                            <lines>
+                                <line number="1" hits="1"/>
+                            </lines>
+                        </method>
+                    </methods>
+                    <lines>
+                        <line number="2" hits="1" branch="false"/>
+                        <line number="6" hits="1" branch="false"/>
+                    </lines>
+                </class>
+            </classes>
+        </package>
+    </packages>
+</coverage>
