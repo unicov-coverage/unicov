@@ -10,7 +10,7 @@ module.exports = {
   testEnvironment: "node",
   rootDir: ".",
   setupFilesAfterEnv: ["./test/testSetupFile.js"],
-  "coverageReporters": [
+  coverageReporters: [
     // "json-summary",
     "json",
     "text",
