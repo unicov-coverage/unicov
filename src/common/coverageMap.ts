@@ -7,9 +7,15 @@ import { CoverageMapData as JsonCoverageMapData } from '../reporters/json/model'
 import { CoverageData as CoberturaCoverageData } from '../reporters/cobertura/model';
 
 export class CommonCoverageMap {
-  fromJson(coverageFile: string): CommonCoverageMapData {
-    const json = fs.readFileSync(coverageFile).toString();
-    const data: JsonCoverageMapData = JSON.parse(json);
+  async fromJson(coverageFile: string): Promise<CommonCoverageMapData> {
+    if (!this.checkFileExistence(coverageFile)) {
+      throw new Error(`Coverage file not found: ${coverageFile}`);
+    }
+    const content = fs.readFileSync(coverageFile).toString();
+    if (!this.isJsonCoverageReporter(content)) {
+      throw new Error(`Invalid json coverage reporter: ${coverageFile}`);
+    }
+    const data: JsonCoverageMapData = JSON.parse(content);
     const commonCoverage = {};
     for (const key in data) {
       const filePath = data[key].path;
@@ -36,8 +42,14 @@ export class CommonCoverageMap {
   }
 
   async fromCobertura(coverageFile: string): Promise<CommonCoverageMapData> {
-    const xml = fs.readFileSync(coverageFile).toString();
-    const data: CoberturaCoverageData = await this.xml2json(xml);
+    if (!this.checkFileExistence(coverageFile)) {
+      throw new Error(`Coverage file not found ${coverageFile}!`);
+    }
+    const content = fs.readFileSync(coverageFile).toString();
+    if (!this.isCoberturaCoverageReporter(content)) {
+      throw new Error(`Invalid cobertura coverage reporter: ${coverageFile}`);
+    }
+    const data: CoberturaCoverageData = await this.xml2json(content);
     const projectRoot = data.coverage.sources[0].source[0];
     const packages = data.coverage.packages;
     const commonCoverage = {};
@@ -65,6 +77,18 @@ export class CommonCoverageMap {
       }
     }
     return commonCoverage;
+  }
+
+  private checkFileExistence(filePath: string): boolean {
+    return fs.existsSync(filePath);
+  }
+
+  private isJsonCoverageReporter(content: string): boolean {
+    return content.indexOf('statementMap') !== -1;
+  }
+
+  private isCoberturaCoverageReporter(content: string): boolean {
+    return content.indexOf('cobertura') !== -1;
   }
 
   private async xml2json(content: string): Promise<any> {

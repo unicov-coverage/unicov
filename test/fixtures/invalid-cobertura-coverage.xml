@@ -1,0 +1,6 @@
+<?xml version="1.0" ?>
+<coverage lines-valid="58" lines-covered="57" line-rate="0.9828" branches-valid="4" branches-covered="3" branch-rate="0.75" timestamp="1630325841466" complexity="0" version="0.1">
+    <sources>
+        <source>$PROJECT_PATH</source>
+    </sources>
+</coverage>
