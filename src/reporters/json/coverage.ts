@@ -54,7 +54,7 @@ export class JsonFileCoverage implements FileCoverage {
   private async getSourceCodeCoverage(coverageMapData: JsonCoverageMapData): Promise<JsonCoverageMapData> {
     const data = {};
     const randomFileCov = this.getRandomProperty(coverageMapData);
-    if (!randomFileCov.inputSourceMap) { // already source code coverage data, just return
+    if (!randomFileCov.inputSourceMap) { // it's source code coverage data already, just return
       return coverageMapData;
     }
     for (const key in coverageMapData) {
