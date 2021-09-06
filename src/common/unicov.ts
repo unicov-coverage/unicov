@@ -2,12 +2,25 @@ import * as fs from 'fs';
 import path from 'path';
 import { parseString } from 'xml2js';
 import * as _ from 'lodash';
-import { CommonCoverageMapData } from './interface';
+import { CoverageReportType, CommonCoverageMapData } from './interface';
 import { CoverageMapData as JsonCoverageMapData } from '../reporters/json/model';
 import { CoverageData as CoberturaCoverageData } from '../reporters/cobertura/model';
 
 export class Unicov {
-  async fromJson(coverageFile: string): Promise<CommonCoverageMapData> {
+  async fromCoverage(coverageFile: string, reporterType: CoverageReportType): Promise<CommonCoverageMapData> {
+    switch (reporterType) {
+      case 'json': {
+        return this._fromJson(coverageFile);
+      }
+      case 'cobertura': {
+        return this._fromCobertura(coverageFile);
+      }
+      default:
+        throw new Error(`Unknown coverage reporter '${reporterType}'`);
+    }
+  }
+
+  private async _fromJson(coverageFile: string): Promise<CommonCoverageMapData> {
     if (!this.checkFileExistence(coverageFile)) {
       throw new Error(`Coverage file not found: ${coverageFile}`);
     }
@@ -41,7 +54,7 @@ export class Unicov {
     return commonCoverage;
   }
 
-  async fromCobertura(coverageFile: string): Promise<CommonCoverageMapData> {
+  private async _fromCobertura(coverageFile: string): Promise<CommonCoverageMapData> {
     if (!this.checkFileExistence(coverageFile)) {
       throw new Error(`Coverage file not found ${coverageFile}!`);
     }
