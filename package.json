@@ -6,7 +6,11 @@
   "types": "lib/types/index.d.ts",
   "scripts": {
     "test": "jest --coverage",
-    "build": "tsc"
+    "build": "tsc",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run tslint",
+    "preversion": "npm run tslint",
+    "postversion": "git push && git push --tags"
   },
   "author": "Ethan Zhang",
   "license": "MIT",
