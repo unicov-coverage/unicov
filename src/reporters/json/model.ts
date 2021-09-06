@@ -10,6 +10,7 @@ export interface FileCoverageData {
   s: { [key: string]: number };
   f: { [key: string]: number };
   b: { [key: string]: number[] };
+  inputSourceMap: any;
 }
 
 interface Location {

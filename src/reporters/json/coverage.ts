@@ -1,8 +1,11 @@
 import fs from 'fs';
 import * as _ from 'lodash';
+import { createCoverageMap } from 'istanbul-lib-coverage';
+import { SourceMapConsumer } from 'source-map';
 import { CommonCoverageMapData, FileCoverage } from '../../common/interface';
 import { CoverageMapData as JsonCoverageMapData } from "./model";
 import { checkFileExistence } from '../../util';
+const transformer = require('istanbul-lib-source-maps/lib/transformer');
 
 export class JsonFileCoverage implements FileCoverage {
   async into(coverageFile: string): Promise<CommonCoverageMapData> {
@@ -13,7 +16,7 @@ export class JsonFileCoverage implements FileCoverage {
     if (!this._isJsonCoverageReporter(content)) {
       throw new Error(`Invalid json coverage reporter: ${coverageFile}`);
     }
-    const data: JsonCoverageMapData = JSON.parse(content);
+    const data = await this.getSourceCodeCoverage(JSON.parse(content));
     const commonCoverage = {};
     for (const key in data) {
       const filePath = data[key].path;
@@ -42,4 +45,26 @@ export class JsonFileCoverage implements FileCoverage {
   private _isJsonCoverageReporter(content: string): boolean {
     return content.indexOf('statementMap') !== -1;
   }
+
+  private getRandomProperty(coverageMapData: JsonCoverageMapData) {
+    const keys = Object.keys(coverageMapData);
+    return coverageMapData[keys[(keys.length * Math.random()) << 0]];
+  }
+
+  private async getSourceCodeCoverage(coverageMapData: JsonCoverageMapData): Promise<JsonCoverageMapData> {
+    const data = {};
+    const randomFileCov = this.getRandomProperty(coverageMapData);
+    if (!randomFileCov.inputSourceMap) { // already source code coverage data, just return
+      return coverageMapData;
+    }
+    for (const key in coverageMapData) {
+      const fileCov = coverageMapData[key];
+      const coverageMap = createCoverageMap({});
+      coverageMap.addFileCoverage(fileCov);
+      const finder = await new SourceMapConsumer(fileCov.inputSourceMap);
+      const mapped = transformer.create(() => finder).transform(coverageMap);
+      Object.assign(data, mapped.data);
+    }
+    return data;
+  };
 }
