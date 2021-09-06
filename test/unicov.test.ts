@@ -3,37 +3,42 @@ import { Unicov } from '../src';
 
 describe('Test Unicov.', () => {
   test('Test fromJson.', async () => {
-    const unicov = new Unicov();
-    const commonCoverage = await unicov.fromCoverage('./test/fixtures/json-coverage.json', 'json');
+    const unicov = await Unicov.fromCoverage('./test/fixtures/json-coverage.json', 'json');
+    const commonCoverage = unicov.getCoverageData();
     const commonCoverageContent = fs.readFileSync('./test/fixtures/common-coverage.json').toString();
     expect(commonCoverage).toEqual(JSON.parse(commonCoverageContent));
   });
 
   test('Test fromCobertura.', async () => {
-    const unicov = new Unicov();
-    const commonCoverage = await unicov.fromCoverage('./test/fixtures/cobertura-coverage.xml', 'cobertura');
+    const unicov = await Unicov.fromCoverage('./test/fixtures/cobertura-coverage.xml', 'cobertura');
+    const commonCoverage = unicov.getCoverageData();
     const commonCoverageContent = fs.readFileSync('./test/fixtures/common-coverage.json').toString();
     expect(commonCoverage).toEqual(JSON.parse(commonCoverageContent));
   });
 
   test('Test coverage file not found.', async () => {
-    const unicov = new Unicov();
-    await expect(unicov.fromCoverage('./test/fixtures/x.json', 'json'))
+    await expect(Unicov.fromCoverage('./test/fixtures/x.json', 'json'))
       .rejects
       .toThrow('Coverage file not found: ./test/fixtures/x.json');
   });
 
   test('Test invalid json coverage file.', async () => {
-    const unicov = new Unicov();
-    await expect(unicov.fromCoverage('./test/fixtures/invalid-json-coverage.json', 'json'))
+    await expect(Unicov.fromCoverage('./test/fixtures/invalid-json-coverage.json', 'json'))
       .rejects
       .toThrow('Invalid json coverage reporter: ./test/fixtures/invalid-json-coverage.json');
   });
 
   test('Test invalid cobertura coverage file.', async () => {
-    const unicov = new Unicov();
-    await expect(unicov.fromCoverage('./test/fixtures/invalid-cobertura-coverage.xml', 'cobertura'))
+    await expect(Unicov.fromCoverage('./test/fixtures/invalid-cobertura-coverage.xml', 'cobertura'))
       .rejects
       .toThrow('Invalid cobertura coverage reporter: ./test/fixtures/invalid-cobertura-coverage.xml');
+  });
+
+  test('Test getFileLineCoverage.', async () => {
+    const unicov = await Unicov.fromCoverage('./test/fixtures/json-coverage.json', 'json');
+    expect(unicov.getFileLineCoverage("$PROJECT_PATH/src/calc.ts", 2)).toEqual(1);
+    expect(unicov.getFileLineCoverage("$PROJECT_PATH/src/calc.ts", 17)).toEqual(2);
+    expect(unicov.getFileLineCoverage("$PROJECT_PATH/src/calc.ts", 6)).toEqual(-1);
+    expect(unicov.getFileLineCoverage("xxx.ts", 3)).toEqual(0);
   });
 });

@@ -2,30 +2,79 @@ import * as fs from 'fs';
 import path from 'path';
 import { parseString } from 'xml2js';
 import * as _ from 'lodash';
-import { CoverageReportType, CommonCoverageMapData } from './interface';
+import { CoverageReporterType, CommonCoverageMapData } from './interface';
 import { CoverageMapData as JsonCoverageMapData } from '../reporters/json/model';
 import { CoverageData as CoberturaCoverageData } from '../reporters/cobertura/model';
 
 export class Unicov {
-  async fromCoverage(coverageFile: string, reporterType: CoverageReportType): Promise<CommonCoverageMapData> {
+  private coverageData: CommonCoverageMapData | null = null;
+
+  private constructor() {
+
+  }
+
+  getCoverageData(): CommonCoverageMapData | null {
+    return this.coverageData;
+  }
+
+  setCoverageData(coverageData: CommonCoverageMapData) {
+    this.coverageData = coverageData;
+  }
+
+  /**
+   * Get Unicov instance by coverage file and coverage reporter type.
+   * @param coverageFile
+   * @param reporterType
+   */
+  static async fromCoverage(coverageFile: string, reporterType: CoverageReporterType): Promise<Unicov> {
     switch (reporterType) {
       case 'json': {
-        return this._fromJson(coverageFile);
+        const instance = new Unicov();
+        const coverageData = await instance._fromJson(coverageFile);
+        instance.setCoverageData(coverageData);
+        return instance;
       }
       case 'cobertura': {
-        return this._fromCobertura(coverageFile);
+        const instance = new Unicov();
+        const coverageData = await instance._fromCobertura(coverageFile);
+        instance.setCoverageData(coverageData);
+        return instance;
       }
       default:
         throw new Error(`Unknown coverage reporter '${reporterType}'`);
     }
   }
 
+  /**
+   * Gets coverage of file line. This method will return hits count of file line.
+   * Particularly, it will return -1 if given line is a non-executable line.
+   * @param filePath
+   * @param lineNumber
+   */
+  getFileLineCoverage(filePath: string, lineNumber: number): number {
+    if (!this.coverageData) {
+      return 0;
+    }
+    const fileCoverage = this.coverageData[filePath];
+    if (!fileCoverage) {
+      return 0;
+    }
+    const lineMap = fileCoverage.lineMap;
+    const line = lineMap[lineNumber];
+    return line ? line.hits : -1;
+  }
+
+  /**
+   * Transform coverage from json reporter
+   * @param coverageFile
+   * @private
+   */
   private async _fromJson(coverageFile: string): Promise<CommonCoverageMapData> {
-    if (!this.checkFileExistence(coverageFile)) {
+    if (!this._checkFileExistence(coverageFile)) {
       throw new Error(`Coverage file not found: ${coverageFile}`);
     }
     const content = fs.readFileSync(coverageFile).toString();
-    if (!this.isJsonCoverageReporter(content)) {
+    if (!this._isJsonCoverageReporter(content)) {
       throw new Error(`Invalid json coverage reporter: ${coverageFile}`);
     }
     const data: JsonCoverageMapData = JSON.parse(content);
@@ -54,15 +103,20 @@ export class Unicov {
     return commonCoverage;
   }
 
+  /**
+   * Transform coverage from cobertura reporter
+   * @param coverageFile
+   * @private
+   */
   private async _fromCobertura(coverageFile: string): Promise<CommonCoverageMapData> {
-    if (!this.checkFileExistence(coverageFile)) {
+    if (!this._checkFileExistence(coverageFile)) {
       throw new Error(`Coverage file not found ${coverageFile}!`);
     }
     const content = fs.readFileSync(coverageFile).toString();
-    if (!this.isCoberturaCoverageReporter(content)) {
+    if (!this._isCoberturaCoverageReporter(content)) {
       throw new Error(`Invalid cobertura coverage reporter: ${coverageFile}`);
     }
-    const data: CoberturaCoverageData = await this.xml2json(content);
+    const data: CoberturaCoverageData = await this._xml2json(content);
     const projectRoot = data.coverage.sources[0].source[0];
     const packages = data.coverage.packages;
     const commonCoverage = {};
@@ -92,19 +146,19 @@ export class Unicov {
     return commonCoverage;
   }
 
-  private checkFileExistence(filePath: string): boolean {
+  private _checkFileExistence(filePath: string): boolean {
     return fs.existsSync(filePath);
   }
 
-  private isJsonCoverageReporter(content: string): boolean {
+  private _isJsonCoverageReporter(content: string): boolean {
     return content.indexOf('statementMap') !== -1;
   }
 
-  private isCoberturaCoverageReporter(content: string): boolean {
+  private _isCoberturaCoverageReporter(content: string): boolean {
     return content.indexOf('cobertura') !== -1;
   }
 
-  private async xml2json(content: string): Promise<any> {
+  private async _xml2json(content: string): Promise<any> {
     return new Promise((resolve, reject) => {
       parseString(content, function (err, result) {
         if (err) {

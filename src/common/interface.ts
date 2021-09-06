@@ -1,4 +1,4 @@
-export type CoverageReportType = 'json' | 'cobertura';
+export type CoverageReporterType = 'json' | 'cobertura';
 
 export interface CommonCoverageMapData {
   [key: string]: CommonCoverageData;
