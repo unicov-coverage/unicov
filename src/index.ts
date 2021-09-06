@@ -1,5 +1,5 @@
-import { CommonCoverageMap } from './common/coverageMap';
+import { Unicov } from './common/unicov';
 
 export {
-  CommonCoverageMap,
+  Unicov,
 }

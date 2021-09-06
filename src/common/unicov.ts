@@ -6,7 +6,7 @@ import { CommonCoverageMapData } from './interface';
 import { CoverageMapData as JsonCoverageMapData } from '../reporters/json/model';
 import { CoverageData as CoberturaCoverageData } from '../reporters/cobertura/model';
 
-export class CommonCoverageMap {
+export class Unicov {
   async fromJson(coverageFile: string): Promise<CommonCoverageMapData> {
     if (!this.checkFileExistence(coverageFile)) {
       throw new Error(`Coverage file not found: ${coverageFile}`);
