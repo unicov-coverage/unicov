@@ -13,3 +13,7 @@ interface Line {
   number: number;
   hits: number;
 }
+
+export interface FileCoverage {
+  into(coverageFile: string): Promise<CommonCoverageMapData>;
+}
