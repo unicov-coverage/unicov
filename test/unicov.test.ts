@@ -16,6 +16,12 @@ describe('Test Unicov.', () => {
     expect(commonCoverage).toEqual(JSON.parse(commonCoverageContent));
   });
 
+  test('Test unknown coverage reporter.', async () => {
+    await expect(Unicov.fromCoverage('./test/fixtures/json-coverage.json', 'xxx' as any))
+      .rejects
+      .toThrow("Unknown coverage reporter 'xxx'");
+  });
+
   test('Test coverage file not found.', async () => {
     await expect(Unicov.fromCoverage('./test/fixtures/x.json', 'json'))
       .rejects
@@ -40,5 +46,9 @@ describe('Test Unicov.', () => {
     expect(unicov.getFileLineCoverage("$PROJECT_PATH/src/calc.ts", 17)).toEqual(2);
     expect(unicov.getFileLineCoverage("$PROJECT_PATH/src/calc.ts", 6)).toEqual(-1);
     expect(unicov.getFileLineCoverage("xxx.ts", 3)).toEqual(0);
+
+    const unicov1 = await Unicov.fromCoverage('./test/fixtures/json-coverage.json', 'json');
+    unicov1.setCoverageData(null as any);
+    expect(unicov1.getFileLineCoverage("xxx.ts", 3)).toEqual(0);
   });
 });
