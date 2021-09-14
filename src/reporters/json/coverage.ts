@@ -4,14 +4,11 @@ import { createCoverageMap } from 'istanbul-lib-coverage';
 import { SourceMapConsumer } from 'source-map';
 import { CommonCoverageMapData, FileCoverage } from '../../common/interface';
 import { CoverageMapData as JsonCoverageMapData } from "./model";
-import { checkFileExistence } from '../../util';
+
 const transformer = require('istanbul-lib-source-maps/lib/transformer');
 
 export class JsonFileCoverage implements FileCoverage {
   async into(coverageFile: string): Promise<CommonCoverageMapData> {
-    if (!checkFileExistence(coverageFile)) {
-      throw new Error(`Coverage file not found: ${coverageFile}`);
-    }
     const content = fs.readFileSync(coverageFile).toString();
     if (!this._isJsonCoverageReporter(content)) {
       throw new Error(`Invalid json coverage reporter: ${coverageFile}`);

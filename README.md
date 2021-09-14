@@ -6,8 +6,7 @@ Supported coverage reporters:
 
 * json
 * cobertura
-
-See [alternative-reporters](https://istanbul.js.org/docs/advanced/alternative-reporters/) to get more information.
+* jacoco
 
 ## Installation
 
@@ -34,6 +33,17 @@ Parsing coverage in `cobertura` format:
 import { Unicov } from '@nullcc/unicov';
 
 const unicov = await Unicov.fromCoverage('./coverage.xml', 'cobertura');
+const commonCoverage = unicov.getCoverageData();
+
+// using commonCoverage...
+```
+
+Parsing coverage in `jacoco` format:
+
+```typescript
+import { Unicov } from '@nullcc/unicov';
+
+const unicov = await Unicov.fromCoverage('./coverage.xml', 'jacoco');
 const commonCoverage = unicov.getCoverageData();
 
 // using commonCoverage...

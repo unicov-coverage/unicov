@@ -1,6 +1,8 @@
 import { CoverageReporterType, CommonCoverageMapData } from './interface';
 import { JsonFileCoverage } from '../reporters/json/coverage';
 import { CoberturaFileCoverage } from '../reporters/cobertura/coverage';
+import { JacocoFileCoverage } from '../reporters/jacoco/coverage';
+import { checkFileExistence } from '../util';
 
 export class Unicov {
   private coverageData: CommonCoverageMapData | null = null;
@@ -23,6 +25,9 @@ export class Unicov {
    * @param reporterType
    */
   static async fromCoverage(coverageFile: string, reporterType: CoverageReporterType): Promise<Unicov> {
+    if (!checkFileExistence(coverageFile)) {
+      throw new Error(`Coverage file not found: ${coverageFile}!`);
+    }
     switch (reporterType) {
       case 'json': {
         const unicov = new Unicov();
@@ -35,6 +40,13 @@ export class Unicov {
         const unicov = new Unicov();
         const coberturaFileCoverage = new CoberturaFileCoverage();
         const coverageData = await coberturaFileCoverage.into(coverageFile);
+        unicov.setCoverageData(coverageData);
+        return unicov;
+      }
+      case 'jacoco': {
+        const unicov = new Unicov();
+        const jacocoFileCoverage = new JacocoFileCoverage();
+        const coverageData = await jacocoFileCoverage.into(coverageFile);
         unicov.setCoverageData(coverageData);
         return unicov;
       }

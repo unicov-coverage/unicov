@@ -2,17 +2,24 @@ import * as fs from 'fs';
 import { Unicov } from '../src';
 
 describe('Test Unicov.', () => {
-  test('Test fromJson.', async () => {
+  test('Test json reporter.', async () => {
     const unicov = await Unicov.fromCoverage('./test/fixtures/json-coverage.json', 'json');
     const commonCoverage = unicov.getCoverageData();
     const commonCoverageContent = fs.readFileSync('./test/fixtures/common-coverage.json').toString();
     expect(commonCoverage).toEqual(JSON.parse(commonCoverageContent));
   });
 
-  test('Test fromCobertura.', async () => {
+  test('Test cobertura reporter.', async () => {
     const unicov = await Unicov.fromCoverage('./test/fixtures/cobertura-coverage.xml', 'cobertura');
     const commonCoverage = unicov.getCoverageData();
     const commonCoverageContent = fs.readFileSync('./test/fixtures/common-coverage.json').toString();
+    expect(commonCoverage).toEqual(JSON.parse(commonCoverageContent));
+  });
+
+  test('Test jacoco reporter.', async () => {
+    const unicov = await Unicov.fromCoverage('./test/fixtures/jacoco-coverage.xml', 'jacoco');
+    const commonCoverage = unicov.getCoverageData();
+    const commonCoverageContent = fs.readFileSync('./test/fixtures/jacoco-coverage.json').toString();
     expect(commonCoverage).toEqual(JSON.parse(commonCoverageContent));
   });
 
@@ -25,7 +32,7 @@ describe('Test Unicov.', () => {
   test('Test coverage file not found.', async () => {
     await expect(Unicov.fromCoverage('./test/fixtures/x.json', 'json'))
       .rejects
-      .toThrow('Coverage file not found: ./test/fixtures/x.json');
+      .toThrow('Coverage file not found: ./test/fixtures/x.json!');
   });
 
   test('Test invalid json coverage file.', async () => {
@@ -38,6 +45,12 @@ describe('Test Unicov.', () => {
     await expect(Unicov.fromCoverage('./test/fixtures/invalid-cobertura-coverage.xml', 'cobertura'))
       .rejects
       .toThrow('Invalid cobertura coverage reporter: ./test/fixtures/invalid-cobertura-coverage.xml');
+  });
+
+  test('Test invalid jacoco coverage file.', async () => {
+    await expect(Unicov.fromCoverage('./test/fixtures/invalid-jacoco-coverage.xml', 'jacoco'))
+      .rejects
+      .toThrow('Invalid jacoco coverage reporter: ./test/fixtures/invalid-jacoco-coverage.xml');
   });
 
   test('Test getFileLineCoverage.', async () => {

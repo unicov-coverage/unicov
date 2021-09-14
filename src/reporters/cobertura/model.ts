@@ -20,7 +20,7 @@ interface Source {
   source: string[];
 }
 
-export interface Package {
+interface Package {
   package: {
     $: {
       name: string;
