@@ -1,5 +1,5 @@
 {
-  "name": "unicov",
+  "name": "@nullcc/unicov",
   "version": "1.0.0",
   "description": "Transforms coverage into an unify coverage format.",
   "main": "lib/index.js",
