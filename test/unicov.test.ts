@@ -2,21 +2,21 @@ import * as fs from 'fs';
 import { Unicov } from '../src';
 
 describe('Test Unicov.', () => {
-  test('Test json reporter.', async () => {
+  test('Test fromCoverage by json reporter.', async () => {
     const unicov = await Unicov.fromCoverage('./test/fixtures/json-coverage.json', 'json');
     const commonCoverage = unicov.getCoverageData();
     const commonCoverageContent = fs.readFileSync('./test/fixtures/common-coverage.json').toString();
     expect(commonCoverage).toEqual(JSON.parse(commonCoverageContent));
   });
 
-  test('Test cobertura reporter.', async () => {
+  test('Test fromCoverage by cobertura reporter.', async () => {
     const unicov = await Unicov.fromCoverage('./test/fixtures/cobertura-coverage.xml', 'cobertura');
     const commonCoverage = unicov.getCoverageData();
     const commonCoverageContent = fs.readFileSync('./test/fixtures/common-coverage.json').toString();
     expect(commonCoverage).toEqual(JSON.parse(commonCoverageContent));
   });
 
-  test('Test jacoco reporter.', async () => {
+  test('Test fromCoverage by jacoco reporter.', async () => {
     const unicov = await Unicov.fromCoverage('./test/fixtures/jacoco-coverage.xml', 'jacoco');
     const commonCoverage = unicov.getCoverageData();
     const commonCoverageContent = fs.readFileSync('./test/fixtures/jacoco-coverage.json').toString();
@@ -63,5 +63,16 @@ describe('Test Unicov.', () => {
     const unicov1 = await Unicov.fromCoverage('./test/fixtures/json-coverage.json', 'json');
     unicov1.setCoverageData(null as any);
     expect(unicov1.getFileLineCoverage("xxx.ts", 3)).toEqual(0);
+  });
+
+  test('Test fromCoverages.', async () => {
+    const coverageFiles = [
+      './test/fixtures/jacoco-coverage-1.xml',
+      './test/fixtures/jacoco-coverage-2.xml'
+    ];
+    const unicov = await Unicov.fromCoverages(coverageFiles, 'jacoco');
+    const commonCoverage = unicov.getCoverageData();
+    const commonCoverageContent = fs.readFileSync('./test/fixtures/jacoco-coverage-merged.json').toString();
+    expect(commonCoverage).toEqual(JSON.parse(commonCoverageContent));
   });
 });

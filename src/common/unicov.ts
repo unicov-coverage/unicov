@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import { CoverageReporterType, CommonCoverageMapData } from './interface';
 import { JsonFileCoverage } from '../reporters/json/coverage';
 import { CoberturaFileCoverage } from '../reporters/cobertura/coverage';
@@ -17,6 +18,24 @@ export class Unicov {
 
   setCoverageData(coverageData: CommonCoverageMapData) {
     this.coverageData = coverageData;
+  }
+
+  static async fromCoverages(coverageFiles: string[], reporterType: CoverageReporterType): Promise<Unicov> {
+    const coverages = await Promise.all(coverageFiles.map(async file => Unicov.fromCoverage(file, reporterType)));
+    return Unicov.merge(coverages);
+  }
+
+  static merge(items: Unicov[]): Unicov {
+    const coverageData = _.chain(items)
+      .map(item => item.getCoverageData())
+      .reduce((acc, curr) => {
+        acc = _.merge(acc, curr);
+        return acc;
+      }, {})
+      .value();
+    const unicov = new Unicov();
+    unicov.setCoverageData(coverageData);
+    return unicov;
   }
 
   /**

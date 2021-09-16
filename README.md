@@ -2,7 +2,7 @@
 
 Transforms coverage into an unify coverage format.
 
-Supported coverage reporters:
+Supported coverage reporter types:
 
 * json
 * cobertura
@@ -16,7 +16,7 @@ $ npm i @nullcc/unicov
 
 ## Usage
 
-Parsing coverage in `json` format:
+Parsing single coverage in `json` format:
 
 ```typescript
 import { Unicov } from '@nullcc/unicov';
@@ -27,23 +27,12 @@ const commonCoverage = unicov.getCoverageData();
 // using commonCoverage...
 ```
 
-Parsing coverage in `cobertura` format:
+Parsing multi coverages in `json` format:
 
 ```typescript
 import { Unicov } from '@nullcc/unicov';
 
-const unicov = await Unicov.fromCoverage('./coverage.xml', 'cobertura');
-const commonCoverage = unicov.getCoverageData();
-
-// using commonCoverage...
-```
-
-Parsing coverage in `jacoco` format:
-
-```typescript
-import { Unicov } from '@nullcc/unicov';
-
-const unicov = await Unicov.fromCoverage('./coverage.xml', 'jacoco');
+const unicov = await Unicov.fromCoverages(['./coverage.json'], 'json');
 const commonCoverage = unicov.getCoverageData();
 
 // using commonCoverage...
