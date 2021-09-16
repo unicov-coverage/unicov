@@ -20,6 +20,9 @@ export class JacocoFileCoverage implements FileCoverage {
           path: filePath,
           lineMap: {},
         };
+        if (!sourceFile.line) {
+          continue;
+        }
         for (const line of sourceFile.line) {
           const lineNumber = parseInt(line.$.nr);
           const hits = parseInt(line.$.ci);
