@@ -20,22 +20,14 @@ export class Unicov {
     this.coverageData = coverageData;
   }
 
+  /**
+   * Get Unicov instance by coverage files and coverage reporter type.
+   * @param coverageFiles
+   * @param reporterType
+   */
   static async fromCoverages(coverageFiles: string[], reporterType: CoverageReporterType): Promise<Unicov> {
     const coverages = await Promise.all(coverageFiles.map(async file => Unicov.fromCoverage(file, reporterType)));
     return Unicov.merge(coverages);
-  }
-
-  static merge(items: Unicov[]): Unicov {
-    const coverageData = _.chain(items)
-      .map(item => item.getCoverageData())
-      .reduce((acc, curr) => {
-        acc = _.merge(acc, curr);
-        return acc;
-      }, {})
-      .value();
-    const unicov = new Unicov();
-    unicov.setCoverageData(coverageData);
-    return unicov;
   }
 
   /**
@@ -72,6 +64,23 @@ export class Unicov {
       default:
         throw new Error(`Unknown coverage reporter '${reporterType}'`);
     }
+  }
+
+  /**
+   * Merges multi unicovs
+   * @param items
+   */
+  static merge(items: Unicov[]): Unicov {
+    const coverageData = _.chain(items)
+      .map(item => item.getCoverageData())
+      .reduce((acc, curr) => {
+        acc = _.merge(acc, curr);
+        return acc;
+      }, {})
+      .value();
+    const unicov = new Unicov();
+    unicov.setCoverageData(coverageData);
+    return unicov;
   }
 
   /**
