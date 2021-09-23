@@ -1,0 +1,12 @@
+<coverage version="1">
+    <file path="/a/b/c.swift">
+        <lineToCover lineNumber="15" covered="true"/>
+        <lineToCover lineNumber="16" covered="true"/>
+        <lineToCover lineNumber="17" covered="true"/>
+        <lineToCover lineNumber="18" covered="true"/>
+        <lineToCover lineNumber="19" covered="false"/>
+        <lineToCover lineNumber="21" covered="false"/>
+        <lineToCover lineNumber="24" covered="false"/>
+        <lineToCover lineNumber="25" covered="false"/>
+    </file>
+</coverage>

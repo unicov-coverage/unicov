@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import { createCoverageMap } from 'istanbul-lib-coverage';
 import { SourceMapConsumer } from 'source-map';
 import { CommonCoverageMapData, FileCoverage } from '../../common/interface';
-import { CoverageMapData as JsonCoverageMapData } from "./model";
+import { CoverageMapData as JsonCoverageMapData } from './model';
 
 const transformer = require('istanbul-lib-source-maps/lib/transformer');
 

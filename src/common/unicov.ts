@@ -3,6 +3,7 @@ import { CoverageReporterType, CommonCoverageMapData } from './interface';
 import { JsonFileCoverage } from '../reporters/json/coverage';
 import { CoberturaFileCoverage } from '../reporters/cobertura/coverage';
 import { JacocoFileCoverage } from '../reporters/jacoco/coverage';
+import { XccovFileCoverage } from '../reporters/xccov/coverage';
 import { checkFileExistence } from '../util';
 
 export class Unicov {
@@ -58,6 +59,13 @@ export class Unicov {
         const unicov = new Unicov();
         const jacocoFileCoverage = new JacocoFileCoverage();
         const coverageData = await jacocoFileCoverage.into(coverageFile);
+        unicov.setCoverageData(coverageData);
+        return unicov;
+      }
+      case 'xccov': {
+        const unicov = new Unicov();
+        const xccovFileCoverage = new XccovFileCoverage();
+        const coverageData = await xccovFileCoverage.into(coverageFile);
         unicov.setCoverageData(coverageData);
         return unicov;
       }

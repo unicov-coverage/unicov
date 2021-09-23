@@ -7,6 +7,7 @@ Supported coverage reporter types:
 * json
 * cobertura
 * jacoco
+* xccov
 
 ## Installation
 

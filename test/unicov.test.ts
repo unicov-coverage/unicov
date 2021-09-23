@@ -23,6 +23,13 @@ describe('Test Unicov.', () => {
     expect(commonCoverage).toEqual(JSON.parse(commonCoverageContent));
   });
 
+  test('Test fromCoverage by xccov reporter.', async () => {
+    const unicov = await Unicov.fromCoverage('./test/fixtures/xccov-coverage.xml', 'xccov');
+    const commonCoverage = unicov.getCoverageData();
+    const commonCoverageContent = fs.readFileSync('./test/fixtures/xccov-coverage.json').toString();
+    expect(commonCoverage).toEqual(JSON.parse(commonCoverageContent));
+  });
+
   test('Test unknown coverage reporter.', async () => {
     await expect(Unicov.fromCoverage('./test/fixtures/json-coverage.json', 'xxx' as any))
       .rejects
