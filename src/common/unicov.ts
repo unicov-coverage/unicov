@@ -130,7 +130,7 @@ export class Unicov {
     if (coveredLines + uncoveredLines === 0) {
       return null;
     } else {
-      return parseFloat((coveredLines / (coveredLines + uncoveredLines)).toFixed(2));
+      return parseFloat((coveredLines / (coveredLines + uncoveredLines)).toFixed(4));
     }
   }
 }
