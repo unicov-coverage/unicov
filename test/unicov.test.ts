@@ -83,8 +83,8 @@ describe('Test Unicov.', () => {
     expect(commonCoverage).toEqual(JSON.parse(commonCoverageContent));
   });
 
-  test('Test getOverallCoverageRate.', async () => {
+  test('Test getOverallLineCoverageRate.', async () => {
     const unicov = await Unicov.fromCoverage('./test/fixtures/xccov-coverage.xml', 'xccov');
-    expect(unicov.getOverallCoverageRate()).toEqual(0.5);
+    expect(unicov.getOverallLineCoverageRate()).toEqual(0.5);
   });
 });

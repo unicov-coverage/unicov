@@ -110,7 +110,7 @@ export class Unicov {
     return line ? line.hits : -1;
   }
 
-  getOverallCoverageRate(): number | null {
+  getOverallLineCoverageRate(): number | null {
     if (this.coverageData === null) {
       throw new Error(`Filed to get overall coverage rate: coverage data is null.`);
     }
