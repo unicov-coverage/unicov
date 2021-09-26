@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { CoverageReporterType, CommonCoverageMapData } from './interface';
+import { CoverageReporterType, CommonCoverageMapData, OverallLineCoverage } from './interface';
 import { JsonFileCoverage } from '../reporters/json/coverage';
 import { CoberturaFileCoverage } from '../reporters/cobertura/coverage';
 import { JacocoFileCoverage } from '../reporters/jacoco/coverage';
@@ -110,7 +110,7 @@ export class Unicov {
     return line ? line.hits : -1;
   }
 
-  getOverallLineCoverageRate(): number | null {
+  getOverallLineCoverage(): OverallLineCoverage {
     if (this.coverageData === null) {
       throw new Error(`Filed to get overall coverage rate: coverage data is null.`);
     }
@@ -127,10 +127,14 @@ export class Unicov {
         }
       }
     }
-    if (coveredLines + uncoveredLines === 0) {
-      return 0;
-    } else {
-      return parseFloat((coveredLines / (coveredLines + uncoveredLines)).toFixed(4));
+    let overallLineCoverageRate = 0;
+    if (coveredLines + uncoveredLines > 0) {
+      overallLineCoverageRate = parseFloat((coveredLines / (coveredLines + uncoveredLines)).toFixed(4));
     }
+    return {
+      coveredLines,
+      uncoveredLines,
+      overallLineCoverageRate,
+    };
   }
 }
