@@ -82,4 +82,9 @@ describe('Test Unicov.', () => {
     const commonCoverageContent = fs.readFileSync('./test/fixtures/jacoco-coverage-merged.json').toString();
     expect(commonCoverage).toEqual(JSON.parse(commonCoverageContent));
   });
+
+  test('Test getOverallCoverageRate.', async () => {
+    const unicov = await Unicov.fromCoverage('./test/fixtures/xccov-coverage.xml', 'xccov');
+    expect(unicov.getOverallCoverageRate()).toEqual(0.5);
+  });
 });

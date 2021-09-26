@@ -13,14 +13,6 @@ export class Unicov {
 
   }
 
-  getCoverageData(): CommonCoverageMapData | null {
-    return this.coverageData;
-  }
-
-  setCoverageData(coverageData: CommonCoverageMapData) {
-    this.coverageData = coverageData;
-  }
-
   /**
    * Get Unicov instance by coverage files and coverage reporter type.
    * @param coverageFiles
@@ -91,6 +83,14 @@ export class Unicov {
     return unicov;
   }
 
+  getCoverageData(): CommonCoverageMapData | null {
+    return this.coverageData;
+  }
+
+  setCoverageData(coverageData: CommonCoverageMapData) {
+    this.coverageData = coverageData;
+  }
+
   /**
    * Gets coverage of file line. This method will return hits count of file line.
    * Particularly, it will return -1 if given line is a non-executable line.
@@ -108,5 +108,30 @@ export class Unicov {
     const lineMap = fileCoverage.lineMap;
     const line = lineMap[lineNumber];
     return line ? line.hits : -1;
+  }
+
+  getOverallCoverageRate(): number | null {
+    if (this.coverageData === null) {
+      throw new Error(`Filed to get overall coverage rate: coverage data is null.`);
+    }
+    let coveredLines = 0;
+    let unCoveredLines = 0;
+
+    for (const fileName in this.coverageData) {
+      const fileCoverageData = this.coverageData[fileName];
+      for (const lineNumber in fileCoverageData.lineMap) {
+        const lineCoverageData = fileCoverageData.lineMap[lineNumber];
+        if (lineCoverageData.hits > 0) {
+          coveredLines += 1;
+        } else {
+          unCoveredLines += 1;
+        }
+      }
+    }
+    if (coveredLines + unCoveredLines === 0) {
+      return null;
+    } else {
+      return parseFloat((coveredLines / (coveredLines + unCoveredLines)).toFixed(2));
+    }
   }
 }
