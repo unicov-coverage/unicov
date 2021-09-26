@@ -115,8 +115,7 @@ export class Unicov {
       throw new Error(`Filed to get overall coverage rate: coverage data is null.`);
     }
     let coveredLines = 0;
-    let unCoveredLines = 0;
-
+    let uncoveredLines = 0;
     for (const fileName in this.coverageData) {
       const fileCoverageData = this.coverageData[fileName];
       for (const lineNumber in fileCoverageData.lineMap) {
@@ -124,14 +123,14 @@ export class Unicov {
         if (lineCoverageData.hits > 0) {
           coveredLines += 1;
         } else {
-          unCoveredLines += 1;
+          uncoveredLines += 1;
         }
       }
     }
-    if (coveredLines + unCoveredLines === 0) {
+    if (coveredLines + uncoveredLines === 0) {
       return null;
     } else {
-      return parseFloat((coveredLines / (coveredLines + unCoveredLines)).toFixed(2));
+      return parseFloat((coveredLines / (coveredLines + uncoveredLines)).toFixed(2));
     }
   }
 }
