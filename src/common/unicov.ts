@@ -122,7 +122,7 @@ export class Unicov {
         const lineCoverageData = fileCoverageData.lineMap[lineNumber];
         if (lineCoverageData.hits > 0) {
           coveredLines += 1;
-        } else {
+        } else if (lineCoverageData.hits === 0) {
           uncoveredLines += 1;
         }
       }
