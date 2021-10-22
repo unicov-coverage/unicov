@@ -1,3 +1,4 @@
+import fs from 'fs';
 import * as _ from 'lodash';
 import { CoverageReporterType, CommonCoverageMapData, OverallLineCoverage } from './interface';
 import { JsonFileCoverage } from '../reporters/json/coverage';
@@ -18,7 +19,7 @@ export class Unicov {
    * @param coverageFiles
    * @param reporterType
    */
-  static async fromCoverages(coverageFiles: string[], reporterType: CoverageReporterType): Promise<Unicov> {
+  static async fromCoverages(coverageFiles: string[], reporterType: CoverageReporterType | 'auto'): Promise<Unicov> {
     const coverages = await Promise.all(coverageFiles.map(async file => Unicov.fromCoverage(file, reporterType)));
     return Unicov.merge(coverages);
   }
@@ -28,11 +29,15 @@ export class Unicov {
    * @param coverageFile
    * @param reporterType
    */
-  static async fromCoverage(coverageFile: string, reporterType: CoverageReporterType): Promise<Unicov> {
+  static async fromCoverage(coverageFile: string, reporterType: CoverageReporterType | 'auto'): Promise<Unicov> {
     if (!checkFileExistence(coverageFile)) {
       throw new Error(`Coverage file not found: ${coverageFile}!`);
     }
-    switch (reporterType) {
+    let type = reporterType;
+    if (type === 'auto') {
+      type = Unicov.getCoverageReporterType(coverageFile);
+    }
+    switch (type) {
       case 'json': {
         const unicov = new Unicov();
         const jsonFileCoverage = new JsonFileCoverage();
@@ -81,6 +86,26 @@ export class Unicov {
     const unicov = new Unicov();
     unicov.setCoverageData(coverageData);
     return unicov;
+  }
+
+  static getCoverageReporterType(coverageFile: string): CoverageReporterType {
+    if (!checkFileExistence(coverageFile)) {
+      throw new Error(`Coverage file not found: ${coverageFile}!`);
+    }
+    const content = fs.readFileSync(coverageFile).toString();
+    const coverageReporterClasses = [
+      JsonFileCoverage,
+      CoberturaFileCoverage,
+      JacocoFileCoverage,
+      XccovFileCoverage,
+    ];
+    for (const coverageReporterClass of coverageReporterClasses) {
+      const coverageReporter = new coverageReporterClass();
+      if (coverageReporter.check(content)) {
+        return coverageReporter.getType();
+      }
+    }
+    throw new Error(`Can't auto detect coverage reporter type for coverage file: ${coverageFile}!`);
   }
 
   getCoverageData(): CommonCoverageMapData | null {

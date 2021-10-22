@@ -1,12 +1,12 @@
 import fs from 'fs';
-import { CommonCoverageMapData, FileCoverage } from '../../common/interface';
+import {CommonCoverageMapData, CoverageReporterType, FileCoverage} from '../../common/interface';
 import { CoverageData as XccovCoverageData } from './model';
 import { xml2json } from '../../util';
 
 export class XccovFileCoverage implements FileCoverage {
   async into(coverageFile: string): Promise<CommonCoverageMapData> {
     const content = fs.readFileSync(coverageFile).toString();
-    if (!this._isXccovCoverageReporter(content)) {
+    if (!this.check(content)) {
       throw new Error(`Invalid xccov coverage reporter: ${coverageFile}`);
     }
     const data: XccovCoverageData = await xml2json(content);
@@ -29,7 +29,11 @@ export class XccovFileCoverage implements FileCoverage {
     return commonCoverage
   }
 
-  private _isXccovCoverageReporter(content: string): boolean {
+  check(content: string): boolean {
     return content.indexOf('lineToCover') !== -1;
+  }
+
+  getType(): CoverageReporterType {
+    return 'xccov';
   }
 }

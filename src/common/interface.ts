@@ -16,6 +16,8 @@ interface Line {
 
 export interface FileCoverage {
   into(coverageFile: string): Promise<CommonCoverageMapData>;
+  check(content: string): boolean;
+  getType(): CoverageReporterType;
 }
 
 export interface OverallLineCoverage {

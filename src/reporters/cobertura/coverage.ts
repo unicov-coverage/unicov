@@ -1,13 +1,13 @@
 import fs from 'fs';
 import path from 'path';
-import { CommonCoverageMapData, FileCoverage } from '../../common/interface';
+import {CommonCoverageMapData, CoverageReporterType, FileCoverage} from '../../common/interface';
 import { CoverageData as CoberturaCoverageData } from './model';
 import { xml2json } from '../../util';
 
 export class CoberturaFileCoverage implements FileCoverage {
   async into(coverageFile: string): Promise<CommonCoverageMapData> {
     const content = fs.readFileSync(coverageFile).toString();
-    if (!this._isCoberturaCoverageReporter(content)) {
+    if (!this.check(content)) {
       throw new Error(`Invalid cobertura coverage reporter: ${coverageFile}`);
     }
     const data: CoberturaCoverageData = await xml2json(content);
@@ -40,7 +40,11 @@ export class CoberturaFileCoverage implements FileCoverage {
     return commonCoverage;
   }
 
-  private _isCoberturaCoverageReporter(content: string): boolean {
+  check(content: string): boolean {
     return content.indexOf('cobertura') !== -1;
+  }
+
+  getType(): CoverageReporterType {
+    return 'cobertura';
   }
 }

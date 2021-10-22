@@ -1,13 +1,13 @@
 import fs from 'fs';
 import path from 'path';
-import { CommonCoverageMapData, FileCoverage } from '../../common/interface';
+import {CommonCoverageMapData, CoverageReporterType, FileCoverage} from '../../common/interface';
 import { CoverageData as JacocoCoverageData } from './model';
 import { xml2json } from '../../util';
 
 export class JacocoFileCoverage implements FileCoverage {
   async into(coverageFile: string): Promise<CommonCoverageMapData> {
     const content = fs.readFileSync(coverageFile).toString();
-    if (!this._isJacocoCoverageReporter(content)) {
+    if (!this.check(content)) {
       throw new Error(`Invalid jacoco coverage reporter: ${coverageFile}`);
     }
     const data: JacocoCoverageData = await xml2json(content);
@@ -45,7 +45,11 @@ export class JacocoFileCoverage implements FileCoverage {
     return commonCoverage;
   }
 
-  private _isJacocoCoverageReporter(content: string): boolean {
+  check(content: string): boolean {
     return content.indexOf('JACOCO') !== -1;
+  }
+
+  getType(): CoverageReporterType {
+    return 'jacoco';
   }
 }

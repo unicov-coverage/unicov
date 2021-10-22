@@ -2,7 +2,7 @@ import fs from 'fs';
 import * as _ from 'lodash';
 import { createCoverageMap } from 'istanbul-lib-coverage';
 import { SourceMapConsumer } from 'source-map';
-import { CommonCoverageMapData, FileCoverage } from '../../common/interface';
+import {CommonCoverageMapData, CoverageReporterType, FileCoverage} from '../../common/interface';
 import { CoverageMapData as JsonCoverageMapData } from './model';
 
 const transformer = require('istanbul-lib-source-maps/lib/transformer');
@@ -10,7 +10,7 @@ const transformer = require('istanbul-lib-source-maps/lib/transformer');
 export class JsonFileCoverage implements FileCoverage {
   async into(coverageFile: string): Promise<CommonCoverageMapData> {
     const content = fs.readFileSync(coverageFile).toString();
-    if (!this._isJsonCoverageReporter(content)) {
+    if (!this.check(content)) {
       throw new Error(`Invalid json coverage reporter: ${coverageFile}`);
     }
     const data = await this.getSourceCodeCoverage(JSON.parse(content));
@@ -39,8 +39,12 @@ export class JsonFileCoverage implements FileCoverage {
     return commonCoverage;
   }
 
-  private _isJsonCoverageReporter(content: string): boolean {
+  check(content: string): boolean {
     return content.indexOf('statementMap') !== -1;
+  }
+
+  getType(): CoverageReporterType {
+    return 'json';
   }
 
   private getRandomProperty(coverageMapData: JsonCoverageMapData) {
