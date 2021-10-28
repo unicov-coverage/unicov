@@ -152,7 +152,7 @@ export class Unicov {
         }
       }
     }
-    let overallLineCoverageRate = 0;
+    let overallLineCoverageRate = 1;
     if (coveredLines + uncoveredLines > 0) {
       overallLineCoverageRate = parseFloat((coveredLines / (coveredLines + uncoveredLines)).toFixed(4));
     }
