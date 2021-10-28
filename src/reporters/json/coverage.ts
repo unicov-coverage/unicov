@@ -25,8 +25,8 @@ export class JsonFileCoverage implements FileCoverage {
       };
       for (const statementKey in statementMap) {
         const range = statementMap[statementKey];
-        const startLine = range.start.column ? range.start.line : range.start.line + 1;
-        const endLine = range.end.column ? range.end.line : range.end.line - 1;
+        const startLine = range.start.line;
+        const endLine = range.end.line;
         const hits = s[statementKey];
         _.range(startLine, endLine + 1).forEach(lineNumber => {
           commonCoverage[filePath].lineMap[lineNumber] = {
