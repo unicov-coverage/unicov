@@ -2,8 +2,12 @@ import fs from 'fs';
 import * as _ from 'lodash';
 import { createCoverageMap } from 'istanbul-lib-coverage';
 import { SourceMapConsumer } from 'source-map';
-import {CommonCoverageMapData, CoverageReporterType, FileCoverage} from '../../common/interface';
-import { CoverageMapData as JsonCoverageMapData } from './model';
+import { CommonCoverageMapData, CoverageReporterType, FileCoverage } from '../../common/interface';
+import {
+  CoverageMapData as JsonCoverageMapData,
+  StatementMap,
+  StatementCounter,
+} from './model';
 
 const transformer = require('istanbul-lib-source-maps/lib/transformer');
 
@@ -17,24 +21,13 @@ export class JsonFileCoverage implements FileCoverage {
     const commonCoverage = {};
     for (const key in data) {
       const filePath = data[key].path;
-      const statementMap = data[key].statementMap;
-      const s = data[key].s;
       commonCoverage[filePath] = {
         path: filePath,
         lineMap: {},
       };
-      for (const statementKey in statementMap) {
-        const range = statementMap[statementKey];
-        const startLine = range.start.line;
-        const endLine = range.end.line;
-        const hits = s[statementKey];
-        _.range(startLine, endLine + 1).forEach(lineNumber => {
-          commonCoverage[filePath].lineMap[lineNumber] = {
-            number: lineNumber,
-            hits,
-          };
-        });
-      }
+      const statementMap = data[key].statementMap;
+      const statementCounter = data[key].s;
+      this.processStatementMap(filePath, commonCoverage, statementMap, statementCounter);
     }
     return commonCoverage;
   }
@@ -74,4 +67,19 @@ export class JsonFileCoverage implements FileCoverage {
     }
     return data;
   };
+
+  private processStatementMap(filePath: string, commonCoverage: any, statementMap: StatementMap, statementCounter: StatementCounter) {
+    for (const key in statementMap) {
+      const range = statementMap[key];
+      const startLine = range.start.line;
+      const endLine = range.end.column === null ? range.start.line : range.end.line;
+      const hits = statementCounter[key];
+      _.range(startLine, endLine + 1).forEach(lineNumber => {
+        commonCoverage[filePath].lineMap[lineNumber] = {
+          number: lineNumber,
+          hits,
+        };
+      });
+    }
+  }
 }

@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import {CommonCoverageMapData, CoverageReporterType, FileCoverage} from '../../common/interface';
+import { CommonCoverageMapData, CoverageReporterType, FileCoverage } from '../../common/interface';
 import { CoverageData as JacocoCoverageData } from './model';
 import { xml2json } from '../../util';
 

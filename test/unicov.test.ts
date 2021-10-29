@@ -5,14 +5,14 @@ describe('Test Unicov.', () => {
   test('Test fromCoverage by json reporter.', async () => {
     const unicov = await Unicov.fromCoverage('./test/fixtures/json-coverage.json', 'json');
     const commonCoverage = unicov.getCoverageData();
-    const commonCoverageContent = fs.readFileSync('./test/fixtures/common-coverage.json').toString();
+    const commonCoverageContent = fs.readFileSync('./test/fixtures/common-json-coverage.json').toString();
     expect(commonCoverage).toEqual(JSON.parse(commonCoverageContent));
   });
 
   test('Test fromCoverage by cobertura reporter.', async () => {
     const unicov = await Unicov.fromCoverage('./test/fixtures/cobertura-coverage.xml', 'cobertura');
     const commonCoverage = unicov.getCoverageData();
-    const commonCoverageContent = fs.readFileSync('./test/fixtures/common-coverage.json').toString();
+    const commonCoverageContent = fs.readFileSync('./test/fixtures/common-cobertura-coverage.json').toString();
     expect(commonCoverage).toEqual(JSON.parse(commonCoverageContent));
   });
 
@@ -34,13 +34,13 @@ describe('Test Unicov.', () => {
     // auto => json
     const unicovJson = await Unicov.fromCoverage('./test/fixtures/json-coverage.json', 'auto');
     const commonCoverageJson = unicovJson.getCoverageData();
-    const commonCoverageContentJson = fs.readFileSync('./test/fixtures/common-coverage.json').toString();
+    const commonCoverageContentJson = fs.readFileSync('./test/fixtures/common-json-coverage.json').toString();
     expect(commonCoverageJson).toEqual(JSON.parse(commonCoverageContentJson));
 
     // cobertura
     const unicovCobertura = await Unicov.fromCoverage('./test/fixtures/cobertura-coverage.xml', 'auto');
     const commonCoverageCobertura = unicovCobertura.getCoverageData();
-    const commonCoverageContentCobertura = fs.readFileSync('./test/fixtures/common-coverage.json').toString();
+    const commonCoverageContentCobertura = fs.readFileSync('./test/fixtures/common-cobertura-coverage.json').toString();
     expect(commonCoverageCobertura).toEqual(JSON.parse(commonCoverageContentCobertura));
 
     // jacoco => json
@@ -117,6 +117,7 @@ describe('Test Unicov.', () => {
     ];
     const unicov = await Unicov.fromCoverages(coverageFiles, 'auto');
     const commonCoverage = unicov.getCoverageData();
+    console.log(JSON.stringify(commonCoverage, null, 2));
     const commonCoverageContent = fs.readFileSync('./test/fixtures/coverage-auto-merged.json').toString();
     expect(commonCoverage).toEqual(JSON.parse(commonCoverageContent));
   });

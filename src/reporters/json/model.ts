@@ -4,13 +4,37 @@ export interface CoverageMapData {
 
 export interface FileCoverageData {
   path: string;
-  statementMap: { [key: string]: Range };
-  fnMap: { [key: string]: FunctionMapping };
-  branchMap: { [key: string]: BranchMapping };
-  s: { [key: string]: number };
-  f: { [key: string]: number };
-  b: { [key: string]: number[] };
+  statementMap: StatementMap;
+  fnMap: FnMap;
+  branchMap: BranchMap;
+  s: StatementCounter;
+  f: FnCounter;
+  b: BranchCounter;
   inputSourceMap: any;
+}
+
+export interface StatementMap {
+  [key: string]: Range;
+}
+
+export interface FnMap {
+  [key: string]: FunctionMapping;
+}
+
+export interface BranchMap {
+  [key: string]: BranchMapping;
+}
+
+export interface StatementCounter {
+  [key: string]: number;
+}
+
+export interface FnCounter {
+  [key: string]: number;
+}
+
+export interface BranchCounter {
+  [key: string]: number[];
 }
 
 interface Location {
