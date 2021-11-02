@@ -1,11 +1,10 @@
-import fs from 'fs';
 import * as _ from 'lodash';
 import { CoverageReporterType, CommonCoverageMapData, OverallLineCoverage } from './interface';
 import { JsonFileCoverage } from '../reporters/json/coverage';
 import { CoberturaFileCoverage } from '../reporters/cobertura/coverage';
 import { JacocoFileCoverage } from '../reporters/jacoco/coverage';
 import { XccovFileCoverage } from '../reporters/xccov/coverage';
-import { checkFileExistence } from '../util';
+import * as util from '../util';
 
 export class Unicov {
   private coverageData: CommonCoverageMapData | null = null;
@@ -30,7 +29,7 @@ export class Unicov {
    * @param reporterType
    */
   static async fromCoverage(coverageFile: string, reporterType: CoverageReporterType | 'auto'): Promise<Unicov> {
-    if (!checkFileExistence(coverageFile)) {
+    if (!util.checkFileExistence(coverageFile)) {
       throw new Error(`Coverage file not found: ${coverageFile}!`);
     }
     let type = reporterType;
@@ -89,10 +88,10 @@ export class Unicov {
   }
 
   static getCoverageReporterType(coverageFile: string): CoverageReporterType {
-    if (!checkFileExistence(coverageFile)) {
+    if (!util.checkFileExistence(coverageFile)) {
       throw new Error(`Coverage file not found: ${coverageFile}!`);
     }
-    const content = fs.readFileSync(coverageFile).toString();
+    const content = util.readFile(coverageFile);
     const coverageReporterClasses = [
       JsonFileCoverage,
       CoberturaFileCoverage,

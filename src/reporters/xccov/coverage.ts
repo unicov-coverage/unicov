@@ -1,15 +1,14 @@
-import fs from 'fs';
 import { CommonCoverageMapData, CoverageReporterType, FileCoverage } from '../../common/interface';
 import { CoverageData as XccovCoverageData } from './model';
-import { xml2json } from '../../util';
+import * as util from '../../util';
 
 export class XccovFileCoverage implements FileCoverage {
   async into(coverageFile: string): Promise<CommonCoverageMapData> {
-    const content = fs.readFileSync(coverageFile).toString();
+    const content = util.readFile(coverageFile);
     if (!this.check(content)) {
       throw new Error(`Invalid xccov coverage reporter: ${coverageFile}`);
     }
-    const data: XccovCoverageData = await xml2json(content);
+    const data: XccovCoverageData = await util.xml2json(content);
     const commonCoverage = {};
     if (!data.coverage.file) {
       return commonCoverage;

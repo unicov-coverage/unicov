@@ -1,4 +1,3 @@
-import fs from 'fs';
 import * as _ from 'lodash';
 import { createCoverageMap } from 'istanbul-lib-coverage';
 import { SourceMapConsumer } from 'source-map';
@@ -8,12 +7,13 @@ import {
   StatementMap,
   StatementCounter,
 } from './model';
+import * as util from '../../util';
 
 const transformer = require('istanbul-lib-source-maps/lib/transformer');
 
 export class JsonFileCoverage implements FileCoverage {
   async into(coverageFile: string): Promise<CommonCoverageMapData> {
-    const content = fs.readFileSync(coverageFile).toString();
+    const content = util.readFile(coverageFile);
     if (!this.check(content)) {
       throw new Error(`Invalid json coverage reporter: ${coverageFile}`);
     }

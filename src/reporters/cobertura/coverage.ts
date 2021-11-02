@@ -1,16 +1,15 @@
-import fs from 'fs';
 import path from 'path';
 import { CommonCoverageMapData, CoverageReporterType, FileCoverage } from '../../common/interface';
 import { CoverageData as CoberturaCoverageData } from './model';
-import { xml2json } from '../../util';
+import * as util from '../../util';
 
 export class CoberturaFileCoverage implements FileCoverage {
   async into(coverageFile: string): Promise<CommonCoverageMapData> {
-    const content = fs.readFileSync(coverageFile).toString();
+    const content = util.readFile(coverageFile);
     if (!this.check(content)) {
       throw new Error(`Invalid cobertura coverage reporter: ${coverageFile}`);
     }
-    const data: CoberturaCoverageData = await xml2json(content);
+    const data: CoberturaCoverageData = await util.xml2json(content);
     const projectRoot = data.coverage.sources[0].source[0];
     const packages = data.coverage.packages;
     const commonCoverage = {};
