@@ -32,3 +32,10 @@ export const xml2json = async(content: string): Promise<any> => {
     });
   });
 }
+
+export const getFilePath = (filePath: string, caseInsensitive: boolean): string => {
+  if (caseInsensitive) {
+    return filePath.toLowerCase();
+  }
+  return filePath;
+};

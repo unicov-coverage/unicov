@@ -1,7 +1,12 @@
 import * as _ from 'lodash';
 import { createCoverageMap } from 'istanbul-lib-coverage';
 import { SourceMapConsumer } from 'source-map';
-import { CommonCoverageMapData, CoverageReporterType, FileCoverage } from '../../common/interface';
+import {
+  FileCoverageOptions,
+  CommonCoverageMapData,
+  CoverageReporterType,
+  FileCoverage,
+} from '../../common/interface';
 import {
   CoverageMapData as JsonCoverageMapData,
   StatementMap,
@@ -12,15 +17,16 @@ import * as util from '../../util';
 const transformer = require('istanbul-lib-source-maps/lib/transformer');
 
 export class JsonFileCoverage implements FileCoverage {
-  async into(coverageFile: string): Promise<CommonCoverageMapData> {
+  async into(coverageFile: string, options: FileCoverageOptions = {}): Promise<CommonCoverageMapData> {
     const content = util.readFile(coverageFile);
     if (!this.check(content)) {
       throw new Error(`Invalid json coverage reporter: ${coverageFile}`);
     }
     const data = await this.getSourceCodeCoverage(JSON.parse(content));
+    const caseInsensitive = !!options.caseInsensitive;
     const commonCoverage = {};
     for (const key in data) {
-      const filePath = data[key].path;
+      const filePath = util.getFilePath(data[key].path, caseInsensitive);
       commonCoverage[filePath] = {
         path: filePath,
         lineMap: {},

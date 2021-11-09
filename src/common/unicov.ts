@@ -1,5 +1,10 @@
 import * as _ from 'lodash';
-import { CoverageReporterType, CommonCoverageMapData, OverallLineCoverage } from './interface';
+import {
+  FileCoverageOptions,
+  CoverageReporterType,
+  CommonCoverageMapData,
+  OverallLineCoverage,
+} from './interface';
 import { JsonFileCoverage } from '../reporters/json/coverage';
 import { CoberturaFileCoverage } from '../reporters/cobertura/coverage';
 import { JacocoFileCoverage } from '../reporters/jacoco/coverage';
@@ -18,8 +23,8 @@ export class Unicov {
    * @param coverageFiles
    * @param reporterType
    */
-  static async fromCoverages(coverageFiles: string[], reporterType: CoverageReporterType | 'auto'): Promise<Unicov> {
-    const coverages = await Promise.all(coverageFiles.map(async file => Unicov.fromCoverage(file, reporterType)));
+  static async fromCoverages(coverageFiles: string[], reporterType: CoverageReporterType | 'auto', options: FileCoverageOptions = {}): Promise<Unicov> {
+    const coverages = await Promise.all(coverageFiles.map(async file => Unicov.fromCoverage(file, reporterType, options)));
     return Unicov.merge(coverages);
   }
 
@@ -28,7 +33,7 @@ export class Unicov {
    * @param coverageFile
    * @param reporterType
    */
-  static async fromCoverage(coverageFile: string, reporterType: CoverageReporterType | 'auto'): Promise<Unicov> {
+  static async fromCoverage(coverageFile: string, reporterType: CoverageReporterType | 'auto', options: FileCoverageOptions = {}): Promise<Unicov> {
     if (!util.checkFileExistence(coverageFile)) {
       throw new Error(`Coverage file not found: ${coverageFile}!`);
     }
@@ -40,28 +45,28 @@ export class Unicov {
       case 'json': {
         const unicov = new Unicov();
         const jsonFileCoverage = new JsonFileCoverage();
-        const coverageData = await jsonFileCoverage.into(coverageFile);
+        const coverageData = await jsonFileCoverage.into(coverageFile, options);
         unicov.setCoverageData(coverageData);
         return unicov;
       }
       case 'cobertura': {
         const unicov = new Unicov();
         const coberturaFileCoverage = new CoberturaFileCoverage();
-        const coverageData = await coberturaFileCoverage.into(coverageFile);
+        const coverageData = await coberturaFileCoverage.into(coverageFile, options);
         unicov.setCoverageData(coverageData);
         return unicov;
       }
       case 'jacoco': {
         const unicov = new Unicov();
         const jacocoFileCoverage = new JacocoFileCoverage();
-        const coverageData = await jacocoFileCoverage.into(coverageFile);
+        const coverageData = await jacocoFileCoverage.into(coverageFile, options);
         unicov.setCoverageData(coverageData);
         return unicov;
       }
       case 'xccov': {
         const unicov = new Unicov();
         const xccovFileCoverage = new XccovFileCoverage();
-        const coverageData = await xccovFileCoverage.into(coverageFile);
+        const coverageData = await xccovFileCoverage.into(coverageFile, options);
         unicov.setCoverageData(coverageData);
         return unicov;
       }
