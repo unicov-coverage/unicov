@@ -31,6 +31,7 @@ export class JacocoFileCoverage implements FileCoverage {
         for (const line of sourceFile.line) {
           const lineNumber = parseInt(line.$.nr, 10);
           const missedInstructions = parseInt(line.$.mi, 10);
+          const coveredInstructions = parseInt(line.$.ci, 10);
           const missedBranches = parseInt(line.$.mb, 10);
           const coveredBranches = parseInt(line.$.cb, 10);
           const isBranch = missedBranches > 0 || coveredBranches > 0;
@@ -38,7 +39,7 @@ export class JacocoFileCoverage implements FileCoverage {
           if (isBranch) {
             hits = coveredBranches > 0 ? 1 : 0;
           } else {
-            hits = missedInstructions === 0 ? 1 : 0;
+            hits = coveredInstructions > 0 ? 1 : 0;
           }
           commonCoverage[filePath].lineMap[lineNumber] = {
             lineNumber,
