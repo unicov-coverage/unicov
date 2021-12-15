@@ -1,16 +1,21 @@
-import fs from 'fs';
 import path from 'path';
-import { CommonCoverageMapData, FileCoverage } from '../../common/interface';
+import {
+  FileCoverageOptions,
+  CommonCoverageMapData,
+  CoverageReporterType,
+  FileCoverage,
+} from '../../common/interface';
 import { CoverageData as CoberturaCoverageData } from './model';
-import { xml2json } from '../../util';
+import * as util from '../../util';
 
 export class CoberturaFileCoverage implements FileCoverage {
-  async into(coverageFile: string): Promise<CommonCoverageMapData> {
-    const content = fs.readFileSync(coverageFile).toString();
-    if (!this._isCoberturaCoverageReporter(content)) {
+  async into(coverageFile: string, options: FileCoverageOptions = {}): Promise<CommonCoverageMapData> {
+    const content = util.readFile(coverageFile);
+    if (!this.check(content)) {
       throw new Error(`Invalid cobertura coverage reporter: ${coverageFile}`);
     }
-    const data: CoberturaCoverageData = await xml2json(content);
+    const data: CoberturaCoverageData = await util.xml2json(content);
+    const caseInsensitive = !!options.caseInsensitive;
     const projectRoot = data.coverage.sources[0].source[0];
     const packages = data.coverage.packages;
     const commonCoverage = {};
@@ -18,7 +23,7 @@ export class CoberturaFileCoverage implements FileCoverage {
       for (const pkg of pkg_.package) {
         for (const cls_ of pkg.classes) {
           for (const cls of cls_.class) {
-            const filePath = path.join(projectRoot, cls.$.filename);
+            const filePath = util.getFilePath(path.join(projectRoot, cls.$.filename), caseInsensitive);
             commonCoverage[filePath] = {
               path: filePath,
               lineMap: {},
@@ -40,7 +45,11 @@ export class CoberturaFileCoverage implements FileCoverage {
     return commonCoverage;
   }
 
-  private _isCoberturaCoverageReporter(content: string): boolean {
+  check(content: string): boolean {
     return content.indexOf('cobertura') !== -1;
+  }
+
+  getType(): CoverageReporterType {
+    return 'cobertura';
   }
 }

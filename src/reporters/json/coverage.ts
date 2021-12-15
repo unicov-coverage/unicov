@@ -1,46 +1,49 @@
-import fs from 'fs';
 import * as _ from 'lodash';
 import { createCoverageMap } from 'istanbul-lib-coverage';
 import { SourceMapConsumer } from 'source-map';
-import { CommonCoverageMapData, FileCoverage } from '../../common/interface';
-import { CoverageMapData as JsonCoverageMapData } from './model';
+import {
+  FileCoverageOptions,
+  CommonCoverageMapData,
+  CoverageReporterType,
+  FileCoverage,
+} from '../../common/interface';
+import {
+  CoverageMapData as JsonCoverageMapData,
+  StatementMap,
+  StatementCounter,
+} from './model';
+import * as util from '../../util';
 
 const transformer = require('istanbul-lib-source-maps/lib/transformer');
 
 export class JsonFileCoverage implements FileCoverage {
-  async into(coverageFile: string): Promise<CommonCoverageMapData> {
-    const content = fs.readFileSync(coverageFile).toString();
-    if (!this._isJsonCoverageReporter(content)) {
+  async into(coverageFile: string, options: FileCoverageOptions = {}): Promise<CommonCoverageMapData> {
+    const content = util.readFile(coverageFile);
+    if (!this.check(content)) {
       throw new Error(`Invalid json coverage reporter: ${coverageFile}`);
     }
     const data = await this.getSourceCodeCoverage(JSON.parse(content));
+    const caseInsensitive = !!options.caseInsensitive;
     const commonCoverage = {};
     for (const key in data) {
-      const filePath = data[key].path;
-      const statementMap = data[key].statementMap;
-      const s = data[key].s;
+      const filePath = util.getFilePath(data[key].path, caseInsensitive);
       commonCoverage[filePath] = {
         path: filePath,
         lineMap: {},
       };
-      for (const statementKey in statementMap) {
-        const range = statementMap[statementKey];
-        const startLine = range.start.column ? range.start.line : range.start.line + 1;
-        const endLine = range.end.column ? range.end.line : range.end.line - 1;
-        const hits = s[statementKey];
-        _.range(startLine, endLine + 1).forEach(lineNumber => {
-          commonCoverage[filePath].lineMap[lineNumber] = {
-            number: lineNumber,
-            hits,
-          };
-        });
-      }
+      const statementMap = data[key].statementMap;
+      const statementCounter = data[key].s;
+      this.processStatementMap(filePath, commonCoverage, statementMap, statementCounter);
     }
     return commonCoverage;
   }
 
-  private _isJsonCoverageReporter(content: string): boolean {
+  check(content: string): boolean {
     return content.indexOf('statementMap') !== -1;
+  }
+
+  getType(): CoverageReporterType {
+    return 'json';
   }
 
   private getRandomProperty(coverageMapData: JsonCoverageMapData) {
@@ -70,4 +73,19 @@ export class JsonFileCoverage implements FileCoverage {
     }
     return data;
   };
+
+  private processStatementMap(filePath: string, commonCoverage: any, statementMap: StatementMap, statementCounter: StatementCounter) {
+    for (const key in statementMap) {
+      const range = statementMap[key];
+      const startLine = range.start.line;
+      const endLine = range.end.column === null ? range.start.line : range.end.line;
+      const hits = statementCounter[key];
+      _.range(startLine, endLine + 1).forEach(lineNumber => {
+        commonCoverage[filePath].lineMap[lineNumber] = {
+          number: lineNumber,
+          hits,
+        };
+      });
+    }
+  }
 }

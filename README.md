@@ -8,6 +8,7 @@ Supported coverage reporter types:
 * cobertura
 * jacoco
 * xccov
+* auto (unicov will detect coverage type automatically)
 
 ## Installation
 
@@ -17,7 +18,7 @@ $ npm i @nullcc/unicov
 
 ## Usage
 
-Parsing single coverage in `json` format:
+Parsing single coverage in a specific type coverage:
 
 ```typescript
 import { Unicov } from '@nullcc/unicov';
@@ -28,12 +29,35 @@ const commonCoverage = unicov.getCoverageData();
 // using commonCoverage...
 ```
 
-Parsing multi coverages in `json` format:
+Parsing multi coverages in a specific coverage format:
 
 ```typescript
 import { Unicov } from '@nullcc/unicov';
 
-const unicov = await Unicov.fromCoverages(['./coverage.json'], 'json');
+const coverageFiles = [
+  './json-coverage1.json',
+  './json-coverage2.json',
+  './json-coverage3.json'
+];
+const unicov = await Unicov.fromCoverages(coverageFiles, 'json');
+const commonCoverage = unicov.getCoverageData();
+
+// using commonCoverage...
+```
+
+Parsing multi coverages automatically:
+
+```typescript
+import { Unicov } from '@nullcc/unicov';
+
+const coverageFiles = [
+  './json-coverage.json',
+  './jacoco-coverage.xml',
+  './cobertura-coverage.xml',
+  './xccov-coverage.xml'
+];
+
+const unicov = await Unicov.fromCoverages(coverageFiles, 'auto');
 const commonCoverage = unicov.getCoverageData();
 
 // using commonCoverage...

@@ -1,8 +1,25 @@
 import fs from 'fs';
+import path from 'path';
 import { parseString } from 'xml2js';
 
 export const checkFileExistence = (filePath: string): boolean => {
-  return fs.existsSync(filePath);
+  const _filePath = resolveFilePath(filePath)
+  return fs.existsSync(_filePath);
+}
+
+export const readFile = (filePath: string): string => {
+  const _filePath = resolveFilePath(filePath)
+  return fs.readFileSync(_filePath).toString();
+}
+
+export const resolveFilePath = (filePath: string): string => {
+  if (filePath.length === 0) {
+    return filePath;
+  }
+  if (filePath[0] === '~') {
+    return path.join(process.env.HOME!, filePath.slice(1));
+  }
+  return filePath;
 }
 
 export const xml2json = async(content: string): Promise<any> => {
@@ -15,3 +32,10 @@ export const xml2json = async(content: string): Promise<any> => {
     });
   });
 }
+
+export const getFilePath = (filePath: string, caseInsensitive: boolean): string => {
+  if (caseInsensitive) {
+    return filePath.toLowerCase();
+  }
+  return filePath;
+};

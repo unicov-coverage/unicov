@@ -1,22 +1,33 @@
-import fs from 'fs';
-import { CommonCoverageMapData, FileCoverage } from '../../common/interface';
+import {
+  FileCoverageOptions,
+  CommonCoverageMapData,
+  CoverageReporterType,
+  FileCoverage,
+} from '../../common/interface';
 import { CoverageData as XccovCoverageData } from './model';
-import { xml2json } from '../../util';
+import * as util from '../../util';
 
 export class XccovFileCoverage implements FileCoverage {
-  async into(coverageFile: string): Promise<CommonCoverageMapData> {
-    const content = fs.readFileSync(coverageFile).toString();
-    if (!this._isXccovCoverageReporter(content)) {
+  async into(coverageFile: string, options: FileCoverageOptions = {}): Promise<CommonCoverageMapData> {
+    const content = util.readFile(coverageFile);
+    if (!this.check(content)) {
       throw new Error(`Invalid xccov coverage reporter: ${coverageFile}`);
     }
-    const data: XccovCoverageData = await xml2json(content);
+    const data: XccovCoverageData = await util.xml2json(content);
+    const caseInsensitive = !!options.caseInsensitive;
     const commonCoverage = {};
+    if (!data.coverage.file) {
+      return commonCoverage;
+    }
     for (const file of data.coverage.file) {
-      const filePath = file.$.path;
+      const filePath = util.getFilePath(file.$.path, caseInsensitive);
       commonCoverage[filePath] = {
         path: filePath,
         lineMap: {},
       };
+      if (!file.lineToCover) {
+        continue;
+      }
       for (const line of file.lineToCover) {
         const lineNumber = parseInt(line.$.lineNumber);
         const hits = line.$.covered === 'true' ? 1 : 0;
@@ -29,7 +40,11 @@ export class XccovFileCoverage implements FileCoverage {
     return commonCoverage
   }
 
-  private _isXccovCoverageReporter(content: string): boolean {
+  check(content: string): boolean {
     return content.indexOf('lineToCover') !== -1;
+  }
+
+  getType(): CoverageReporterType {
+    return 'xccov';
   }
 }

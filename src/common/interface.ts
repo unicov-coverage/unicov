@@ -1,3 +1,7 @@
+export interface FileCoverageOptions {
+  caseInsensitive?: boolean;
+}
+
 export type CoverageReporterType = 'json' | 'cobertura' | 'jacoco' | 'xccov';
 
 export interface CommonCoverageMapData {
@@ -15,5 +19,13 @@ interface Line {
 }
 
 export interface FileCoverage {
-  into(coverageFile: string): Promise<CommonCoverageMapData>;
+  into(coverageFile: string, options: FileCoverageOptions): Promise<CommonCoverageMapData>;
+  check(content: string): boolean;
+  getType(): CoverageReporterType;
+}
+
+export interface OverallLineCoverage {
+  coveredLines: number;
+  uncoveredLines: number;
+  overallLineCoverageRate: number;
 }
