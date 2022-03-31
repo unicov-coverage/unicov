@@ -12,8 +12,9 @@ export interface ParseOptions {
  * A union of known reporter type identifiers.
  */
 export type CoverageReporterType =
-  | "istanbul"
+  | "clover"
   | "cobertura"
+  | "istanbul"
   | "jacoco"
   | "lcov"
   | "xccov";
