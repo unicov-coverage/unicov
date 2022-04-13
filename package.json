@@ -4,6 +4,9 @@
   "description": "Transforms coverage into an unify coverage format.",
   "main": "lib/index.js",
   "types": "lib/types/index.d.ts",
+  "bin": {
+    "unicov": "lib/main.js"
+  },
   "scripts": {
     "test": "jest --coverage",
     "build": "tsc",
@@ -24,6 +27,7 @@
     "@types/node": "^16.11.6",
     "@types/xml2js": "^0.4.9",
     "jest": "^27.1.0",
+    "prettier": "^2.6.2",
     "ts-jest": "^27.0.5",
     "typescript": "^4.4.2"
   },
@@ -32,7 +36,6 @@
     "istanbul-lib-coverage": "^3.0.0",
     "istanbul-lib-source-maps": "^4.0.0",
     "lodash": "^4.17.21",
-    "prettier": "^2.6.2",
     "source-map": "^0.7.3",
     "xml2js": "^0.4.23"
   }
