@@ -2,7 +2,7 @@ export interface FileCoverageOptions {
   caseInsensitive?: boolean;
 }
 
-export type CoverageReporterType = 'json' | 'cobertura' | 'jacoco' | 'xccov';
+export type CoverageReporterType = "json" | "cobertura" | "jacoco" | "xccov";
 
 export interface CommonCoverageMapData {
   [key: string]: CommonCoverageData;
@@ -19,7 +19,10 @@ interface Line {
 }
 
 export interface FileCoverage {
-  into(coverageFile: string, options: FileCoverageOptions): Promise<CommonCoverageMapData>;
+  into(
+    coverageFile: string,
+    options: FileCoverageOptions
+  ): Promise<CommonCoverageMapData>;
   check(content: string): boolean;
   getType(): CoverageReporterType;
 }

@@ -3,12 +3,15 @@ import {
   CommonCoverageMapData,
   CoverageReporterType,
   FileCoverage,
-} from '../../common/interface';
-import { CoverageData as XccovCoverageData } from './model';
-import * as util from '../../util';
+} from "../../common/interface";
+import { CoverageData as XccovCoverageData } from "./model";
+import * as util from "../../util";
 
 export class XccovFileCoverage implements FileCoverage {
-  async into(coverageFile: string, options: FileCoverageOptions = {}): Promise<CommonCoverageMapData> {
+  async into(
+    coverageFile: string,
+    options: FileCoverageOptions = {}
+  ): Promise<CommonCoverageMapData> {
     const content = util.readFile(coverageFile);
     if (!this.check(content)) {
       throw new Error(`Invalid xccov coverage reporter: ${coverageFile}`);
@@ -30,21 +33,21 @@ export class XccovFileCoverage implements FileCoverage {
       }
       for (const line of file.lineToCover) {
         const lineNumber = parseInt(line.$.lineNumber);
-        const hits = line.$.covered === 'true' ? 1 : 0;
+        const hits = line.$.covered === "true" ? 1 : 0;
         commonCoverage[filePath].lineMap[lineNumber] = {
           lineNumber,
           hits,
         };
       }
     }
-    return commonCoverage
+    return commonCoverage;
   }
 
   check(content: string): boolean {
-    return content.indexOf('lineToCover') !== -1;
+    return content.indexOf("lineToCover") !== -1;
   }
 
   getType(): CoverageReporterType {
-    return 'xccov';
+    return "xccov";
   }
 }

@@ -1,15 +1,18 @@
-import path from 'path';
+import path from "path";
 import {
   FileCoverageOptions,
   CommonCoverageMapData,
   CoverageReporterType,
   FileCoverage,
-} from '../../common/interface';
-import { CoverageData as JacocoCoverageData } from './model';
-import * as util from '../../util';
+} from "../../common/interface";
+import { CoverageData as JacocoCoverageData } from "./model";
+import * as util from "../../util";
 
 export class JacocoFileCoverage implements FileCoverage {
-  async into(coverageFile: string, options: FileCoverageOptions = {}): Promise<CommonCoverageMapData> {
+  async into(
+    coverageFile: string,
+    options: FileCoverageOptions = {}
+  ): Promise<CommonCoverageMapData> {
     const content = util.readFile(coverageFile);
     if (!this.check(content)) {
       throw new Error(`Invalid jacoco coverage reporter: ${coverageFile}`);
@@ -20,7 +23,10 @@ export class JacocoFileCoverage implements FileCoverage {
     for (const pkg of data.report.package) {
       const pkgDir = pkg.$.name;
       for (const sourceFile of pkg.sourcefile) {
-        const filePath = util.getFilePath(path.join(pkgDir, sourceFile.$.name), caseInsensitive);
+        const filePath = util.getFilePath(
+          path.join(pkgDir, sourceFile.$.name),
+          caseInsensitive
+        );
         commonCoverage[filePath] = {
           path: filePath,
           lineMap: {},
@@ -52,10 +58,10 @@ export class JacocoFileCoverage implements FileCoverage {
   }
 
   check(content: string): boolean {
-    return content.indexOf('JACOCO') !== -1;
+    return content.indexOf("JACOCO") !== -1;
   }
 
   getType(): CoverageReporterType {
-    return 'jacoco';
+    return "jacoco";
   }
 }

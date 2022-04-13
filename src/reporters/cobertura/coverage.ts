@@ -1,15 +1,18 @@
-import path from 'path';
+import path from "path";
 import {
   FileCoverageOptions,
   CommonCoverageMapData,
   CoverageReporterType,
   FileCoverage,
-} from '../../common/interface';
-import { CoverageData as CoberturaCoverageData } from './model';
-import * as util from '../../util';
+} from "../../common/interface";
+import { CoverageData as CoberturaCoverageData } from "./model";
+import * as util from "../../util";
 
 export class CoberturaFileCoverage implements FileCoverage {
-  async into(coverageFile: string, options: FileCoverageOptions = {}): Promise<CommonCoverageMapData> {
+  async into(
+    coverageFile: string,
+    options: FileCoverageOptions = {}
+  ): Promise<CommonCoverageMapData> {
     const content = util.readFile(coverageFile);
     if (!this.check(content)) {
       throw new Error(`Invalid cobertura coverage reporter: ${coverageFile}`);
@@ -23,13 +26,16 @@ export class CoberturaFileCoverage implements FileCoverage {
       for (const pkg of pkg_.package) {
         for (const cls_ of pkg.classes) {
           for (const cls of cls_.class) {
-            const filePath = util.getFilePath(path.join(projectRoot, cls.$.filename), caseInsensitive);
+            const filePath = util.getFilePath(
+              path.join(projectRoot, cls.$.filename),
+              caseInsensitive
+            );
             commonCoverage[filePath] = {
               path: filePath,
               lineMap: {},
             };
-            cls.lines.forEach(line => {
-              line.line.forEach(line => {
+            cls.lines.forEach((line) => {
+              line.line.forEach((line) => {
                 const lineNumber = parseInt(line.$.number);
                 const hits = parseInt(line.$.hits);
                 commonCoverage[filePath].lineMap[lineNumber] = {
@@ -46,10 +52,10 @@ export class CoberturaFileCoverage implements FileCoverage {
   }
 
   check(content: string): boolean {
-    return content.indexOf('cobertura') !== -1;
+    return content.indexOf("cobertura") !== -1;
   }
 
   getType(): CoverageReporterType {
-    return 'cobertura';
+    return "cobertura";
   }
 }

@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-import { Unicov } from './index'
+import { Unicov } from "./index";
 
-(function main() {
-
-})()
+(function main() {})();

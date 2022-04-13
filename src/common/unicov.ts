@@ -1,30 +1,36 @@
-import * as _ from 'lodash';
+import * as _ from "lodash";
 import {
   FileCoverageOptions,
   CoverageReporterType,
   CommonCoverageMapData,
   OverallLineCoverage,
-} from './interface';
-import { JsonFileCoverage } from '../reporters/json/coverage';
-import { CoberturaFileCoverage } from '../reporters/cobertura/coverage';
-import { JacocoFileCoverage } from '../reporters/jacoco/coverage';
-import { XccovFileCoverage } from '../reporters/xccov/coverage';
-import * as util from '../util';
+} from "./interface";
+import { JsonFileCoverage } from "../reporters/json/coverage";
+import { CoberturaFileCoverage } from "../reporters/cobertura/coverage";
+import { JacocoFileCoverage } from "../reporters/jacoco/coverage";
+import { XccovFileCoverage } from "../reporters/xccov/coverage";
+import * as util from "../util";
 
 export class Unicov {
   private coverageData: CommonCoverageMapData | null = null;
 
-  private constructor() {
-
-  }
+  private constructor() {}
 
   /**
    * Get Unicov instance by coverage files and coverage reporter type.
    * @param coverageFiles
    * @param reporterType
    */
-  static async fromCoverages(coverageFiles: string[], reporterType: CoverageReporterType | 'auto', options: FileCoverageOptions = {}): Promise<Unicov> {
-    const coverages = await Promise.all(coverageFiles.map(async file => Unicov.fromCoverage(file, reporterType, options)));
+  static async fromCoverages(
+    coverageFiles: string[],
+    reporterType: CoverageReporterType | "auto",
+    options: FileCoverageOptions = {}
+  ): Promise<Unicov> {
+    const coverages = await Promise.all(
+      coverageFiles.map(async (file) =>
+        Unicov.fromCoverage(file, reporterType, options)
+      )
+    );
     return Unicov.merge(coverages);
   }
 
@@ -33,40 +39,53 @@ export class Unicov {
    * @param coverageFile
    * @param reporterType
    */
-  static async fromCoverage(coverageFile: string, reporterType: CoverageReporterType | 'auto', options: FileCoverageOptions = {}): Promise<Unicov> {
+  static async fromCoverage(
+    coverageFile: string,
+    reporterType: CoverageReporterType | "auto",
+    options: FileCoverageOptions = {}
+  ): Promise<Unicov> {
     if (!util.checkFileExistence(coverageFile)) {
       throw new Error(`Coverage file not found: ${coverageFile}!`);
     }
     let type = reporterType;
-    if (type === 'auto') {
+    if (type === "auto") {
       type = Unicov.getCoverageReporterType(coverageFile);
     }
     switch (type) {
-      case 'json': {
+      case "json": {
         const unicov = new Unicov();
         const jsonFileCoverage = new JsonFileCoverage();
         const coverageData = await jsonFileCoverage.into(coverageFile, options);
         unicov.setCoverageData(coverageData);
         return unicov;
       }
-      case 'cobertura': {
+      case "cobertura": {
         const unicov = new Unicov();
         const coberturaFileCoverage = new CoberturaFileCoverage();
-        const coverageData = await coberturaFileCoverage.into(coverageFile, options);
+        const coverageData = await coberturaFileCoverage.into(
+          coverageFile,
+          options
+        );
         unicov.setCoverageData(coverageData);
         return unicov;
       }
-      case 'jacoco': {
+      case "jacoco": {
         const unicov = new Unicov();
         const jacocoFileCoverage = new JacocoFileCoverage();
-        const coverageData = await jacocoFileCoverage.into(coverageFile, options);
+        const coverageData = await jacocoFileCoverage.into(
+          coverageFile,
+          options
+        );
         unicov.setCoverageData(coverageData);
         return unicov;
       }
-      case 'xccov': {
+      case "xccov": {
         const unicov = new Unicov();
         const xccovFileCoverage = new XccovFileCoverage();
-        const coverageData = await xccovFileCoverage.into(coverageFile, options);
+        const coverageData = await xccovFileCoverage.into(
+          coverageFile,
+          options
+        );
         unicov.setCoverageData(coverageData);
         return unicov;
       }
@@ -81,7 +100,7 @@ export class Unicov {
    */
   static merge(items: Unicov[]): Unicov {
     const coverageData = _.chain(items)
-      .map(item => item.getCoverageData())
+      .map((item) => item.getCoverageData())
       .reduce((acc, curr) => {
         acc = _.merge(acc, curr);
         return acc;
@@ -109,7 +128,9 @@ export class Unicov {
         return coverageReporter.getType();
       }
     }
-    throw new Error(`Can't auto detect coverage reporter type for coverage file: ${coverageFile}!`);
+    throw new Error(
+      `Can't auto detect coverage reporter type for coverage file: ${coverageFile}!`
+    );
   }
 
   getCoverageData(): CommonCoverageMapData | null {
@@ -141,7 +162,9 @@ export class Unicov {
 
   getOverallLineCoverage(): OverallLineCoverage {
     if (this.coverageData === null) {
-      throw new Error(`Filed to get overall coverage rate: coverage data is null.`);
+      throw new Error(
+        `Filed to get overall coverage rate: coverage data is null.`
+      );
     }
     let coveredLines = 0;
     let uncoveredLines = 0;
@@ -158,7 +181,9 @@ export class Unicov {
     }
     let overallLineCoverageRate = 1;
     if (coveredLines + uncoveredLines > 0) {
-      overallLineCoverageRate = parseFloat((coveredLines / (coveredLines + uncoveredLines)).toFixed(4));
+      overallLineCoverageRate = parseFloat(
+        (coveredLines / (coveredLines + uncoveredLines)).toFixed(4)
+      );
     }
     return {
       coveredLines,
