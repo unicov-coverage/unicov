@@ -11,13 +11,15 @@
     "test": "jest --coverage",
     "build": "tsc",
     "prepare": "npm run build",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "prettier": "prettier -w ./src ./test",
+    "prettier-check": "prettier -c ./src ./test"
   },
   "author": "Ethan Zhang",
   "license": "MIT",
   "husky": {
     "hooks": {
-      "pre-commit": "npm test"
+      "pre-commit": "npm test && npm run prettier-check"
     }
   },
   "devDependencies": {
