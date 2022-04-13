@@ -85,3 +85,7 @@ const commonCoverage = unicov.getCoverageData();
 ```shell script
 $ npm publish --access public
 ```
+
+## License
+
+MIT
