@@ -42,3 +42,9 @@ export const getFilePath = (
   }
   return filePath;
 };
+
+export function sorted<T>(arr: T[]): T[] {
+  const sorted = arr.slice(0);
+  sorted.sort();
+  return sorted;
+}

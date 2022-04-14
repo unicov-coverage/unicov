@@ -2,9 +2,10 @@ import * as _ from "lodash";
 import { createCoverageMap } from "istanbul-lib-coverage";
 import { SourceMapConsumer } from "source-map";
 import {
-  FileCoverageOptions,
-  CommonCoverageMapData,
+  ParseOptions,
+  CommonCoverage,
   CoverageReporterType,
+  Reporter,
   FileCoverage,
 } from "../../common/interface";
 import {
@@ -16,41 +17,46 @@ import * as util from "../../util";
 
 const transformer = require("istanbul-lib-source-maps/lib/transformer");
 
-export class JsonFileCoverage implements FileCoverage {
-  async into(
-    coverageFile: string,
-    options: FileCoverageOptions = {}
-  ): Promise<CommonCoverageMapData> {
-    const content = util.readFile(coverageFile);
+export class JsonReporter implements Reporter {
+  async parse(
+    content: string,
+    options: ParseOptions = {}
+  ): Promise<CommonCoverage> {
     if (!this.check(content)) {
-      throw new Error(`Invalid json coverage reporter: ${coverageFile}`);
+      throw new Error(`Invalid json coverage reporter`);
     }
     const data = await this.getSourceCodeCoverage(JSON.parse(content));
     const caseInsensitive = !!options.caseInsensitive;
-    const commonCoverage = {};
+    const commonCoverage: CommonCoverage = {
+      files: [],
+    };
     for (const key in data) {
       const filePath = util.getFilePath(data[key].path, caseInsensitive);
-      commonCoverage[filePath] = {
+      const fileCoverage: FileCoverage = {
         path: filePath,
-        lineMap: {},
+        lines: [],
       };
+      commonCoverage.files.push(fileCoverage);
       const statementMap = data[key].statementMap;
       const statementCounter = data[key].s;
-      this.processStatementMap(
-        filePath,
-        commonCoverage,
-        statementMap,
-        statementCounter
-      );
+      this.processStatementMap(fileCoverage, statementMap, statementCounter);
     }
     return commonCoverage;
+  }
+
+  format(data: CommonCoverage): string {
+    throw new Error("Not implemented.");
   }
 
   check(content: string): boolean {
     return content.indexOf("statementMap") !== -1;
   }
 
-  getType(): CoverageReporterType {
+  type(): CoverageReporterType {
+    return "json";
+  }
+
+  extension(): string {
     return "json";
   }
 
@@ -74,7 +80,7 @@ export class JsonFileCoverage implements FileCoverage {
       // it's source code coverage data already, just return
       return coverageMapData;
     }
-    for (const key in coverageMapData) {
+    for (const key of Object.keys(coverageMapData)) {
       const fileCov = coverageMapData[key];
       const coverageMap = createCoverageMap({});
       coverageMap.addFileCoverage(fileCov);
@@ -86,8 +92,7 @@ export class JsonFileCoverage implements FileCoverage {
   }
 
   private processStatementMap(
-    filePath: string,
-    commonCoverage: any,
+    fileCoverage: FileCoverage,
     statementMap: StatementMap,
     statementCounter: StatementCounter
   ) {
@@ -98,10 +103,11 @@ export class JsonFileCoverage implements FileCoverage {
         range.end.column === null ? range.start.line : range.end.line;
       const hits = statementCounter[key];
       _.range(startLine, endLine + 1).forEach((lineNumber) => {
-        commonCoverage[filePath].lineMap[lineNumber] = {
+        fileCoverage.lines.push({
           number: lineNumber,
           hits,
-        };
+          branches: [],
+        });
       });
     }
   }

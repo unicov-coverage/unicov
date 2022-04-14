@@ -1,4 +1,4 @@
-export interface CoverageData {
+export interface CoberturaCoverageData {
   coverage: {
     $: {
       "line-rate": string;
