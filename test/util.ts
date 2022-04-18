@@ -16,7 +16,7 @@ export function checkSnapshot(unicov: Unicov, name: string) {
     expect(JSON.parse(commonCoverageContent)).toEqual(unicov.getCoverageData());
   } catch (e: any) {
     console.log(
-      `Snapshot test failed for ${name}. If this is expected, execute \`npm run test-update-snapshots\`.`
+      `Snapshot test failed for ${name}. If this is expected, execute \`npm run update-snapshots\`.`
     );
     throw e;
   }
@@ -54,7 +54,7 @@ export async function checkOutputSnapshot(
     );
   } catch (e: any) {
     console.log(
-      `Snapshot test failed for ${filename}. If this is expected, execute \`npm run test-update-snapshots\`.`
+      `Snapshot test failed for ${filename}. If this is expected, execute \`npm run update-snapshots\`.`
     );
     throw e;
   } finally {

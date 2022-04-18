@@ -5,7 +5,7 @@ describe("Content-based file detection", () => {
   test("Test fromCoverage by auto reporter.", async () => {
     // auto => json
     const unicovJson = await Unicov.fromCoverage(
-      "./test/fixtures/json-coverage.json",
+      "./test/fixtures/istanbul-coverage.json",
       "auto"
     );
     checkSnapshot(unicovJson, "common-json-coverage");

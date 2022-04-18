@@ -1,4 +1,3 @@
-import * as _ from "lodash";
 import { createCoverageMap } from "istanbul-lib-coverage";
 import { SourceMapConsumer } from "source-map";
 import {
@@ -12,12 +11,14 @@ import {
   CoverageMapData as JsonCoverageMapData,
   StatementMap,
   StatementCounter,
+  CoverageMapData,
+  FileCoverageData,
 } from "./model";
 import * as util from "../../util";
 
 const transformer = require("istanbul-lib-source-maps/lib/transformer");
 
-export class JsonReporter implements Reporter {
+export class IstanbulReporter implements Reporter {
   async parse(
     content: string,
     options: ParseOptions = {}
@@ -45,7 +46,40 @@ export class JsonReporter implements Reporter {
   }
 
   format(data: CommonCoverage): string {
-    throw new Error("Not implemented.");
+    const coverage: CoverageMapData = {};
+    for (const file of data.files) {
+      let path = file.path;
+      if (data.projectRoot) {
+        path = data.projectRoot + "/" + path;
+      }
+      const statementMap: StatementMap = {};
+      const statementCounter: StatementCounter = {};
+      for (const line of file.lines) {
+        statementCounter[line.number] = line.hits;
+        statementMap[line.number] = {
+          start: {
+            line: line.number,
+            column: 0,
+          },
+          end: {
+            line: line.number,
+            column: 120,
+          },
+        };
+      }
+      const fileCoverage: FileCoverageData = {
+        path,
+        branchMap: {},
+        b: {},
+        fnMap: {},
+        f: {},
+        statementMap: statementMap,
+        s: statementCounter,
+        inputSourceMap: null,
+      };
+      coverage[file.path] = fileCoverage;
+    }
+    return JSON.stringify(coverage, null, 2);
   }
 
   check(content: string): boolean {
@@ -53,7 +87,7 @@ export class JsonReporter implements Reporter {
   }
 
   type(): CoverageReporterType {
-    return "json";
+    return "istanbul";
   }
 
   extension(): string {
@@ -102,13 +136,13 @@ export class JsonReporter implements Reporter {
       const endLine =
         range.end.column === null ? range.start.line : range.end.line;
       const hits = statementCounter[key];
-      _.range(startLine, endLine + 1).forEach((lineNumber) => {
+      for (let lineNumber = startLine; lineNumber < endLine + 1; lineNumber++) {
         fileCoverage.lines.push({
           number: lineNumber,
           hits,
           branches: [],
         });
-      });
+      }
     }
   }
 }

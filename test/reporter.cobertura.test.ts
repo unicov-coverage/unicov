@@ -15,9 +15,19 @@ describe("CoberturaReporter", () => {
   test("Formatting", async () => {
     const unicov = await Unicov.fromCoverage(
       "./test/fixtures/lcov.info",
-      "lcov"
+      "lcov",
+      { caseInsensitive: true }
     );
     checkOutputSnapshot(unicov, "cobertura", "cobertura-output.xml");
+  });
+
+  test("Formatting with Project Root", async () => {
+    const unicov = await Unicov.fromCoverage(
+      "./test/fixtures/lcov.info",
+      "lcov"
+    );
+    unicov.getCoverageData().projectRoot = "/tmp";
+    checkOutputSnapshot(unicov, "cobertura", "cobertura-output-projroot.xml");
   });
 
   test("Test invalid cobertura coverage file.", async () => {
