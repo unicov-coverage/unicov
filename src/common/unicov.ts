@@ -8,7 +8,9 @@ import {
   LineCoverage,
   BranchCoverage,
 } from "./interface";
+
 import {
+  CloverReporter,
   CoberturaReporter,
   IstanbulReporter,
   JacocoReporter,
