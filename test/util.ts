@@ -8,12 +8,12 @@ export function checkSnapshot(unicov: Unicov, name: string) {
   const snapshot = name.includes("/") ? name : `./test/fixtures/${name}.json`;
   if (!fs.existsSync(snapshot) || process.env.UPDATE_SNAPSHOTS === "1") {
     const newContent = JSON.stringify(unicov.getCoverageData(), null, 2);
-    fs.writeFileSync(snapshot, newContent);
+    fs.writeFileSync(snapshot, newContent + "\n");
     return;
   }
   try {
     const commonCoverageContent = fs.readFileSync(snapshot).toString();
-    expect(JSON.parse(commonCoverageContent)).toEqual(unicov.getCoverageData());
+    expect(unicov.getCoverageData()).toEqual(JSON.parse(commonCoverageContent));
   } catch (e: any) {
     console.log(
       `Snapshot test failed for ${name}. If this is expected, execute \`npm run update-snapshots\`.`

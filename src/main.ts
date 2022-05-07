@@ -3,7 +3,6 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { CoverageReporterType } from "./common/interface";
-
 import { Unicov } from "./index";
 
 (async function main() {

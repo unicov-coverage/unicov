@@ -87,10 +87,6 @@
           "branches": []
         }
       ]
-    },
-    {
-      "path": "com/wmbest/myapplicationtest/Empty.java",
-      "lines": []
     }
   ],
   "projectRoot": "com/wmbest/myapplicationtest"
