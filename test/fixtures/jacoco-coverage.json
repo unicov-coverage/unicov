@@ -1,0 +1,93 @@
+{
+  "files": [
+    {
+      "path": "com/wmbest/myapplicationtest/MainActivity.java",
+      "lines": [
+        {
+          "number": 8,
+          "hits": 0,
+          "branches": []
+        },
+        {
+          "number": 11,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 12,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 13,
+          "hits": 1,
+          "branches": [
+            {
+              "index": 0,
+              "hits": 1
+            },
+            {
+              "index": 1,
+              "hits": 0
+            }
+          ]
+        },
+        {
+          "number": 18,
+          "hits": 0,
+          "branches": []
+        },
+        {
+          "number": 19,
+          "hits": 0,
+          "branches": []
+        },
+        {
+          "number": 20,
+          "hits": 0,
+          "branches": []
+        },
+        {
+          "number": 25,
+          "hits": 0,
+          "branches": []
+        },
+        {
+          "number": 26,
+          "hits": 0,
+          "branches": []
+        },
+        {
+          "number": 34,
+          "hits": 0,
+          "branches": []
+        },
+        {
+          "number": 37,
+          "hits": 0,
+          "branches": [
+            {
+              "index": 0,
+              "hits": 0
+            },
+            {
+              "index": 1,
+              "hits": 0
+            }
+          ]
+        },
+        {
+          "number": 38,
+          "hits": 0,
+          "branches": []
+        },
+        {
+          "number": 41,
+          "hits": 0,
+          "branches": []
+        }
+      ]
+    }
+  ],
+  "projectRoot": "com/wmbest/myapplicationtest"
+}
