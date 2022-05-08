@@ -14,7 +14,15 @@ import { Unicov } from "./index";
       default: "lcov:lcov.info",
       description: "Write output to (format):(path)",
     })
+    .option("plugin", {
+      alias: "p",
+      type: "array",
+      required: false,
+    })
     .parse();
+  for (const plugin of args.plugin || []) {
+    Unicov.registerPlugin(String(plugin));
+  }
   const unicov = await Unicov.fromCoverages(args._.map(String));
   const outputParts = args.output.split(":");
   const reporterType = (outputParts[0] as CoverageReporterType) || "cobertura";

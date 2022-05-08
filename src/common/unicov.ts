@@ -38,6 +38,15 @@ export class Unicov {
     this.coverageData = coverageData;
   }
 
+  static registerPlugin(moduleName: string) {
+    const module = require(moduleName);
+    if (module.reporters) {
+      for (const reporter of module.reporters) {
+        REPORTERS.push(reporter);
+      }
+    }
+  }
+
   /**
    * Get Unicov instance by coverage files and coverage reporter type.
    * @param coverageFiles
