@@ -80,6 +80,41 @@ const commonCoverage = unicov.getCoverageData();
 
 // using commonCoverage...
 ```
+## Plugin Usage
+
+Installed plugin packages may be specified on the command line:
+
+```
+unicov --plugin "@unicov/unicov-html" --output unicov-html:coverage.html coverage/*.xml
+```
+
+There is also a programmatic interface for specifying plugins:
+```
+Unicov.registerPlugin("@unicov/unicov-html")
+// ...
+unicov.toFile("coverage.html", "unicov-html");
+```
+
+## Plugin Development
+
+Third-party plugins can support the addition of one or more reporters.
+
+```
+// See: src/common/interface.ts
+interface Reporter {
+  // ...
+}
+
+// lib/MyCustomReporter.js
+class MyCustomReporter implements Reporter {
+  // ...
+}
+
+// lib/index.js
+module.exports = {
+  reporters: [new MyCustomReporter()]
+};
+```
 
 ## Publish
 
