@@ -37,10 +37,10 @@ export class JacocoReporter implements Reporter {
           path: filePath,
           lines: [],
         };
-        commonCoverage.files.push(fileCoverage);
         if (!sourceFile.line) {
           continue;
         }
+        commonCoverage.files.push(fileCoverage);
         for (const line of sourceFile.line) {
           const lineNumber = parseInt(line.$.nr, 10);
           const coveredInstructions = parseInt(line.$.ci, 10);
