@@ -6,19 +6,22 @@ import {
   CoverageReporterType,
   Reporter,
   FileCoverage,
-} from '../../common/interface';
+} from "../../common/interface";
 
-import { CoverageData as CloverCoverageData } from './model';
-import * as util from '../../util';
+import { CoverageData as CloverCoverageData } from "./model";
+import * as util from "../../util";
 
 export class CloverReporter implements Reporter {
-  async parse(content: string, options: ParseOptions = {}): Promise<CommonCoverage> {
+  async parse(
+    content: string,
+    options: ParseOptions = {}
+  ): Promise<CommonCoverage> {
     if (!this.check(content)) {
       throw new Error("Invalid clover coverage reporter");
     }
     const data: CloverCoverageData = await util.xml2json(content);
     const caseInsensitive = !!options.caseInsensitive;
-    const commonCoverage: CommonCoverage = {files: []};
+    const commonCoverage: CommonCoverage = { files: [] };
     for (const project of data.coverage.project) {
       for (const pkg of project.package) {
         for (const file of pkg.file) {
@@ -28,16 +31,16 @@ export class CloverReporter implements Reporter {
           }
           const fileCoverage: FileCoverage = {
             path: filePath,
-            lines: []
-          }
-          commonCoverage.files.push(fileCoverage)
-          file.line.forEach(line => {
+            lines: [],
+          };
+          commonCoverage.files.push(fileCoverage);
+          file.line.forEach((line) => {
             const lineNumber = parseInt(line.$.num);
             const hits = parseInt(line.$.count);
             fileCoverage.lines.push({
               number: lineNumber,
               hits,
-              branches: []
+              branches: [],
             });
           });
         }
@@ -50,9 +53,9 @@ export class CloverReporter implements Reporter {
     const root = create({ version: "1.0" });
     const cov = root.ele("coverage");
     cov.att(null, "clover", "3.2.0");
-    cov.att(null, "generated", String(+ new Date()));
+    cov.att(null, "generated", String(+new Date()));
     const project = cov.ele("project");
-    const pkg = project.ele("package"); 
+    const pkg = project.ele("package");
     for (const fileCoverage of coverage.files) {
       const file = pkg.ele("file");
       file.att(null, "path", fileCoverage.path);
@@ -62,11 +65,11 @@ export class CloverReporter implements Reporter {
         line.att(null, "count", String(lineCoverage.hits));
       }
     }
-    return root.end({prettyPrint: true});
+    return root.end({ prettyPrint: true });
   }
 
   check(content: string): boolean {
-    return content.indexOf("clover=\"") !== -1;
+    return content.indexOf('clover="') !== -1;
   }
 
   type(): CoverageReporterType {

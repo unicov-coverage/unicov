@@ -22,7 +22,6 @@ import {
   XccovReporter,
 } from "../reporters";
 
-
 const REPORTERS: Reporter[] = [
   new CloverReporter(),
   new CoberturaReporter(),
