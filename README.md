@@ -5,6 +5,7 @@ A universal translator for code coverage data, offering a CLI tool (unicov) and 
 Supported coverage formats:
 
 * auto<sup>[1]</sup>
+* clover
 * cobertura
 * jacoco
 * json
@@ -69,9 +70,9 @@ import { Unicov } from '@nullcc/unicov';
 
 const coverageFiles = [
   './json-coverage.json',
-  './jacoco-coverage.xml',
-  './cobertura-coverage.xml',
-  './xccov-coverage.xml'
+  './jacoco-empty-cobertura-coverage.xml',
+  './cobertura-empty-cobertura-coverage.xml',
+  './xccov-empty-cobertura-coverage.xml'
 ];
 
 const unicov = await Unicov.fromCoverages(coverageFiles, 'auto');
