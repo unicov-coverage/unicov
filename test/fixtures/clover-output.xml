@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<coverage clover="3.2.0" generated="1651974519992">
+  <project>
+    <package>
+      <file path="path/to/source.cpp">
+        <line num="1" count="3"/>
+        <line num="2" count="3"/>
+        <line num="3" count="3"/>
+        <line num="4" count="1"/>
+        <line num="5" count="0"/>
+      </file>
+      <file path="path/second/my_file.cpp">
+        <line num="1" count="3"/>
+        <line num="2" count="3"/>
+        <line num="3" count="3"/>
+      </file>
+    </package>
+  </project>
+</coverage>

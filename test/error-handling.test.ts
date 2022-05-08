@@ -42,7 +42,7 @@ describe("Error handling", () => {
     const unicov = await Unicov.fromCoverage(
       "./test/fixtures/istanbul-coverage.json"
     );
-    // @ts-expect-error
+    // @ts-ignore
     unicov.setCoverageData(null);
     expect(() => unicov.getOverallLineCoverage()).toThrow(
       "Failed to get overall coverage rate: coverage data is null."

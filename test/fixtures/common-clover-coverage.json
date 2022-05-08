@@ -1,0 +1,304 @@
+{
+  "files": [
+    {
+      "path": "/home/project/a.js",
+      "lines": [
+        {
+          "number": 19,
+          "hits": 25,
+          "branches": []
+        },
+        {
+          "number": 28,
+          "hits": 25,
+          "branches": []
+        },
+        {
+          "number": 29,
+          "hits": 2,
+          "branches": []
+        },
+        {
+          "number": 32,
+          "hits": 25,
+          "branches": []
+        },
+        {
+          "number": 33,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 34,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 35,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 42,
+          "hits": 25,
+          "branches": []
+        },
+        {
+          "number": 43,
+          "hits": 0,
+          "branches": []
+        },
+        {
+          "number": 46,
+          "hits": 25,
+          "branches": []
+        },
+        {
+          "number": 54,
+          "hits": 25,
+          "branches": []
+        },
+        {
+          "number": 55,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 56,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 59,
+          "hits": 28,
+          "branches": []
+        },
+        {
+          "number": 63,
+          "hits": 25,
+          "branches": []
+        },
+        {
+          "number": 67,
+          "hits": 25,
+          "branches": []
+        },
+        {
+          "number": 71,
+          "hits": 25,
+          "branches": []
+        },
+        {
+          "number": 72,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 73,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 75,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 76,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 77,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 78,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 80,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 81,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 85,
+          "hits": 25,
+          "branches": []
+        },
+        {
+          "number": 86,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 87,
+          "hits": 0,
+          "branches": []
+        },
+        {
+          "number": 89,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 93,
+          "hits": 25,
+          "branches": []
+        },
+        {
+          "number": 97,
+          "hits": 25,
+          "branches": []
+        },
+        {
+          "number": 98,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 101,
+          "hits": 25,
+          "branches": []
+        },
+        {
+          "number": 102,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 105,
+          "hits": 25,
+          "branches": []
+        },
+        {
+          "number": 106,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 109,
+          "hits": 25,
+          "branches": []
+        },
+        {
+          "number": 110,
+          "hits": 3,
+          "branches": []
+        },
+        {
+          "number": 111,
+          "hits": 3,
+          "branches": []
+        },
+        {
+          "number": 112,
+          "hits": 3,
+          "branches": []
+        },
+        {
+          "number": 114,
+          "hits": 3,
+          "branches": []
+        },
+        {
+          "number": 115,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 116,
+          "hits": 2,
+          "branches": []
+        },
+        {
+          "number": 117,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 119,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 122,
+          "hits": 43,
+          "branches": []
+        },
+        {
+          "number": 127,
+          "hits": 25,
+          "branches": []
+        },
+        {
+          "number": 131,
+          "hits": 25,
+          "branches": []
+        },
+        {
+          "number": 135,
+          "hits": 25,
+          "branches": []
+        },
+        {
+          "number": 136,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 137,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 140,
+          "hits": 25,
+          "branches": []
+        },
+        {
+          "number": 141,
+          "hits": 0,
+          "branches": []
+        },
+        {
+          "number": 144,
+          "hits": 25,
+          "branches": []
+        },
+        {
+          "number": 145,
+          "hits": 3,
+          "branches": []
+        }
+      ]
+    },
+    {
+      "path": "/home/project/b.js",
+      "lines": [
+        {
+          "number": 3,
+          "hits": 22,
+          "branches": []
+        },
+        {
+          "number": 8,
+          "hits": 22,
+          "branches": []
+        },
+        {
+          "number": 13,
+          "hits": 22,
+          "branches": []
+        }
+      ]
+    }
+  ]
+}

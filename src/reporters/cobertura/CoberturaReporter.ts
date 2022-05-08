@@ -3,7 +3,6 @@ import {
   CommonCoverage,
   CoverageReporterType,
   FileCoverage,
-  Formatter,
   LineCoverage,
   ParseOptions,
   Reporter,
@@ -42,6 +41,9 @@ export class CoberturaReporter implements Reporter {
             };
             commonCoverage.files.push(fileCoverage);
             cls.lines.forEach((line) => {
+              if (!line.line) {
+                return;
+              }
               line.line.forEach((line) => {
                 const number = parseInt(line.$.number);
                 const hits = parseInt(line.$.hits);

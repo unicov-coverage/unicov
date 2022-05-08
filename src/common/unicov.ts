@@ -1,14 +1,20 @@
 import fs from "fs";
+
+import * as util from "../util";
+
 import {
-  ParseOptions,
+  BranchCoverage,
   CoverageReporterType,
   CommonCoverage,
-  OverallLineCoverage,
   FileCoverage,
   LineCoverage,
-  BranchCoverage,
+  OverallLineCoverage,
+  ParseOptions,
+  Reporter,
 } from "./interface";
+
 import {
+  CloverReporter,
   CoberturaReporter,
   IstanbulReporter,
   JacocoReporter,
@@ -16,10 +22,8 @@ import {
   XccovReporter,
 } from "../reporters";
 
-import * as util from "../util";
-import { Reporter } from "./interface";
-
 const REPORTERS: Reporter[] = [
+  new CloverReporter(),
   new CoberturaReporter(),
   new JacocoReporter(),
   new IstanbulReporter(),
