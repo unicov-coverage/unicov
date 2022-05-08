@@ -5,81 +5,77 @@
       "lines": [
         {
           "number": 2,
-          "hits": 1,
-          "branches": [],
-          "branchMap": {}
+          "hits": 2,
+          "branches": []
         },
         {
           "number": 3,
-          "hits": 1,
-          "branches": [],
-          "branchMap": {}
+          "hits": 2,
+          "branches": []
         },
         {
           "number": 4,
-          "hits": 1,
-          "branches": [],
-          "branchMap": {}
+          "hits": 2,
+          "branches": []
         },
         {
           "number": 5,
-          "hits": 1,
-          "branches": [],
-          "branchMap": {}
+          "hits": 2,
+          "branches": []
         },
         {
           "number": 9,
-          "hits": 1,
-          "branches": [],
-          "branchMap": {}
+          "hits": 2,
+          "branches": []
         },
         {
           "number": 13,
-          "hits": 2,
-          "branches": [],
-          "branchMap": {}
+          "hits": 4,
+          "branches": []
         },
         {
           "number": 17,
-          "hits": 2,
-          "branches": [],
-          "branchMap": {}
+          "hits": 4,
+          "branches": [
+            {
+              "index": 0,
+              "hits": 1
+            },
+            {
+              "index": 1,
+              "hits": 1
+            }
+          ]
         },
         {
           "number": 18,
-          "hits": 1,
-          "branches": [],
-          "branchMap": {}
+          "hits": 2,
+          "branches": []
         },
         {
           "number": 20,
-          "hits": 1,
-          "branches": [],
-          "branchMap": {}
+          "hits": 2,
+          "branches": []
         },
         {
           "number": 24,
-          "hits": 1,
-          "branches": [],
-          "branchMap": {}
+          "hits": 2,
+          "branches": []
         },
         {
           "number": 25,
-          "hits": 1,
-          "branches": [],
-          "branchMap": {}
+          "hits": 2,
+          "branches": []
         },
         {
           "number": 26,
-          "hits": 1,
-          "branches": [],
-          "branchMap": {}
+          "hits": 2,
+          "branches": []
         },
         {
           "number": 27,
-          "hits": 1,
-          "branches": [],
-          "branchMap": {}
+          "hits": 2,
+          "branches": []
         }
       ]
     },
@@ -88,15 +84,13 @@
       "lines": [
         {
           "number": 2,
-          "hits": 1,
-          "branches": [],
-          "branchMap": {}
+          "hits": 2,
+          "branches": []
         },
         {
           "number": 6,
-          "hits": 1,
-          "branches": [],
-          "branchMap": {}
+          "hits": 2,
+          "branches": []
         }
       ]
     },
@@ -106,53 +100,207 @@
         {
           "number": 15,
           "hits": 1,
-          "branches": [],
-          "branchMap": {}
+          "branches": []
         },
         {
           "number": 16,
           "hits": 1,
-          "branches": [],
-          "branchMap": {}
+          "branches": []
         },
         {
           "number": 17,
           "hits": 1,
-          "branches": [],
-          "branchMap": {}
+          "branches": []
         },
         {
           "number": 18,
           "hits": 1,
-          "branches": [],
-          "branchMap": {}
+          "branches": []
         },
         {
           "number": 19,
           "hits": 0,
-          "branches": [],
-          "branchMap": {}
+          "branches": []
         },
         {
           "number": 21,
           "hits": 0,
-          "branches": [],
-          "branchMap": {}
+          "branches": []
         },
         {
           "number": 24,
           "hits": 0,
-          "branches": [],
-          "branchMap": {}
+          "branches": []
         },
         {
           "number": 25,
           "hits": 0,
-          "branches": [],
-          "branchMap": {}
+          "branches": []
+        }
+      ]
+    },
+    {
+      "path": "/b/c/d.swift",
+      "lines": []
+    },
+    {
+      "path": "com/wmbest/myapplicationtest/MainActivity.java",
+      "lines": [
+        {
+          "number": 8,
+          "hits": 0,
+          "branches": []
+        },
+        {
+          "number": 11,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 12,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 13,
+          "hits": 1,
+          "branches": [
+            {
+              "index": 0,
+              "hits": 1
+            },
+            {
+              "index": 1,
+              "hits": 0
+            }
+          ]
+        },
+        {
+          "number": 18,
+          "hits": 0,
+          "branches": []
+        },
+        {
+          "number": 19,
+          "hits": 0,
+          "branches": []
+        },
+        {
+          "number": 20,
+          "hits": 0,
+          "branches": []
+        },
+        {
+          "number": 25,
+          "hits": 0,
+          "branches": []
+        },
+        {
+          "number": 26,
+          "hits": 0,
+          "branches": []
+        },
+        {
+          "number": 34,
+          "hits": 0,
+          "branches": []
+        },
+        {
+          "number": 37,
+          "hits": 0,
+          "branches": [
+            {
+              "index": 0,
+              "hits": 0
+            },
+            {
+              "index": 1,
+              "hits": 0
+            }
+          ]
+        },
+        {
+          "number": 38,
+          "hits": 0,
+          "branches": []
+        },
+        {
+          "number": 41,
+          "hits": 0,
+          "branches": []
+        }
+      ]
+    },
+    {
+      "path": "path/second/my_file.cpp",
+      "lines": [
+        {
+          "number": 1,
+          "hits": 3,
+          "branches": []
+        },
+        {
+          "number": 2,
+          "hits": 3,
+          "branches": []
+        },
+        {
+          "number": 3,
+          "hits": 3,
+          "branches": []
+        }
+      ]
+    },
+    {
+      "path": "path/to/source.cpp",
+      "lines": [
+        {
+          "number": 1,
+          "hits": 3,
+          "branches": [
+            {
+              "index": 0,
+              "hits": 1
+            },
+            {
+              "index": 1,
+              "hits": 2
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "hits": 3,
+          "branches": [
+            {
+              "index": 0,
+              "hits": 1
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "hits": 3,
+          "branches": [
+            {
+              "index": 0,
+              "hits": 0
+            }
+          ]
+        },
+        {
+          "number": 4,
+          "hits": 1,
+          "branches": []
+        },
+        {
+          "number": 5,
+          "hits": 0,
+          "branches": []
         }
       ]
     }
   ],
-  "projectRoot": "com/wmbest/myapplicationtest"
+  "projectRoot": "$PROJECT_PATH",
+  "testSuiteName": "Unit Tests"
 }

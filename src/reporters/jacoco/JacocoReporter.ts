@@ -33,13 +33,14 @@ export class JacocoReporter implements Reporter {
           path.join(pkgDir, sourceFile.$.name),
           caseInsensitive
         );
-        commonCoverage[filePath] = {
+        const fileCoverage: FileCoverage = {
           path: filePath,
-          lineMap: {},
+          lines: [],
         };
         if (!sourceFile.line) {
           continue;
         }
+        commonCoverage.files.push(fileCoverage);
         for (const line of sourceFile.line) {
           const lineNumber = parseInt(line.$.nr, 10);
           const coveredInstructions = parseInt(line.$.ci, 10);
@@ -64,11 +65,11 @@ export class JacocoReporter implements Reporter {
               hits,
             });
           }
-          commonCoverage[filePath].lineMap[lineNumber] = {
-            lineNumber,
+          fileCoverage.lines.push({
+            number: lineNumber,
             hits,
             branches,
-          };
+          });
         }
       }
     }

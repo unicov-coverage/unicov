@@ -1,4 +1,3 @@
-import * as _ from "lodash";
 import fs from "fs";
 import {
   ParseOptions,
@@ -8,20 +7,22 @@ import {
   FileCoverage,
   LineCoverage,
   BranchCoverage,
-  Formatter,
 } from "./interface";
-import { JsonReporter } from "../reporters/json/JsonReporter";
-import { CoberturaReporter } from "../reporters/cobertura/CoberturaReporter";
-import { JacocoReporter } from "../reporters/jacoco/JacocoReporter";
-import { XccovReporter } from "../reporters/xccov/XccovReporter";
+import {
+  CoberturaReporter,
+  IstanbulReporter,
+  JacocoReporter,
+  LcovReporter,
+  XccovReporter,
+} from "../reporters";
+
 import * as util from "../util";
 import { Reporter } from "./interface";
-import { LcovReporter } from "../reporters/lcov/LcovReporter";
 
 const REPORTERS: Reporter[] = [
   new CoberturaReporter(),
   new JacocoReporter(),
-  new JsonReporter(),
+  new IstanbulReporter(),
   new LcovReporter(),
   new XccovReporter(),
 ];
@@ -41,7 +42,7 @@ export class Unicov {
   static async fromCoverages(
     coverageFiles: string[],
     reporterType: CoverageReporterType | "auto" = "auto",
-    options: ParseOptions = {}
+    options: ParseOptions | undefined = void 0
   ): Promise<Unicov> {
     const coverages = await Promise.all(
       coverageFiles.map(async (file) =>
@@ -58,8 +59,8 @@ export class Unicov {
    */
   static async fromCoverage(
     coverageFile: string,
-    reporterType: CoverageReporterType | "auto",
-    options: ParseOptions = {}
+    reporterType: CoverageReporterType | "auto" = "auto",
+    options: ParseOptions | undefined = void 0
   ): Promise<Unicov> {
     if (!util.checkFileExistence(coverageFile)) {
       throw new Error(`Coverage file not found: ${coverageFile}!`);
@@ -98,7 +99,6 @@ export class Unicov {
           number,
           hits: 0,
           branches: [],
-          branchMap: {},
         });
         if (lineData.hits > 0) {
           comb.hits += lineData.hits;
@@ -117,7 +117,7 @@ export class Unicov {
       }
       for (const line of Object.values(lineMap)) {
         const branchMap = branchMapByLine[line.number];
-        const indexes = Object.keys(branchMap).map(parseInt);
+        const indexes = Object.keys(branchMap).map((s) => parseInt(s, 10));
         for (const index of util.sorted(indexes)) {
           line.branches.push({
             index,
@@ -217,7 +217,7 @@ export class Unicov {
       (lc) => lc.number === lineNumber
     )[0];
     if (!lineCoverage) {
-      return -1;
+      return 0;
     }
     return lineCoverage.hits;
   }
@@ -225,7 +225,7 @@ export class Unicov {
   getOverallLineCoverage(): OverallLineCoverage {
     if (this.coverageData === null) {
       throw new Error(
-        `Filed to get overall coverage rate: coverage data is null.`
+        `Failed to get overall coverage rate: coverage data is null.`
       );
     }
     let coveredLines = 0;

@@ -44,6 +44,10 @@
           "branches": []
         }
       ]
+    },
+    {
+      "path": "/b/c/d.swift",
+      "lines": []
     }
   ]
 }

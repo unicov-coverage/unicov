@@ -12,7 +12,7 @@ export interface ParseOptions {
  * A union of known reporter type identifiers.
  */
 export type CoverageReporterType =
-  | "json"
+  | "istanbul"
   | "cobertura"
   | "jacoco"
   | "lcov"
@@ -95,7 +95,7 @@ export interface Parser {
    * single digit MB or tens of MB, it's acceptable to provide the
    * full content rather than using a streaming API.
    */
-  parse(content: string, options: ParseOptions): Promise<CommonCoverage>;
+  parse(content: string, options?: ParseOptions): Promise<CommonCoverage>;
 
   /**
    * Check if the provided content is parseable by this interface.
